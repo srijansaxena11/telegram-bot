@@ -73,7 +73,7 @@ def inlinequery(bot, update):
     
 def ping(update, context):
     start_time = int(round(time.time() * 1000))
-    reply = sendMessage("Starting Ping", context.bot, update)
+    reply = context.bot.send_message(chat_id=update.message.chat_id, text="Starting Ping") #context.bot.send_message("Starting Ping", context.bot, update)
     end_time = int(round(time.time() * 1000))
     editMessage(f'{end_time - start_time} ms', reply)
 
