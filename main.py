@@ -5,7 +5,6 @@ import logging
 # from uuid import uuid4
 from telegram.utils.helpers import escape_markdown
 import random
-from pythonping import ping
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 
@@ -71,12 +70,11 @@ def inlinequery(bot, update):
                 query))]
     update.inline_query.answer(results)
     
-def ping_test(update, context):
-    host = update.message.text
-    print("Host: "+host)
-    ping_result = ping('8.8.8.8')
-    chat_id = update.message.chat_id
-    context.bot.send_message(chat_id=update.message.chat_id, text="Result: "+ping_result+" ms")
+def ping(update, context):
+    start_time = int(round(time.time() * 1000))
+    reply = sendMessage("Starting Ping", context.bot, update)
+    end_time = int(round(time.time() * 1000))
+    editMessage(f'{end_time - start_time} ms', reply)
 
 def main():
     updater = Updater('2113253226:AAHH4MMbAQieoxDQWZmpll3aJPMW6C9G4_M')
@@ -84,7 +82,7 @@ def main():
     dp.add_handler(CommandHandler('start',start))
     dp.add_handler(CommandHandler('eth',eth))
     dp.add_handler(CommandHandler('bop',bop))
-    dp.add_handler(CommandHandler('ping',ping_test))
+    dp.add_handler(CommandHandler('ping',ping))
 #     dp.add_handler(CommandHandler('stark',stark))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
     dp.add_handler(MessageHandler(Filters.text, message_received))
