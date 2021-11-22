@@ -76,7 +76,7 @@ def main():
     dp.add_handler(CommandHandler('start',start))
     dp.add_handler(CommandHandler('eth',eth))
     dp.add_handler(CommandHandler('bop',bop))
-    dp.add_handler(CommandHandler('stark',stark))
+#     dp.add_handler(CommandHandler('stark',stark))
     dp.add_handler(MessageHandler(Filters.text, echo))
     dp.add_handler(MessageHandler(Filters.text, sleeping))
     dp.add_handler(InlineQueryHandler(inlinequery))
