@@ -72,6 +72,8 @@ def inlinequery(bot, update):
     update.inline_query.answer(results)
     
 def ping(update, context):
+    host = update.message.text
+    print("Host: "+host)
     ping_result = ping('8.8.8.8')
     chat_id = update.message.chat_id
     context.bot.send_message(chat_id=update.message.chat_id, text="Result: "+ping_result+" ms")
@@ -82,6 +84,7 @@ def main():
     dp.add_handler(CommandHandler('start',start))
     dp.add_handler(CommandHandler('eth',eth))
     dp.add_handler(CommandHandler('bop',bop))
+    dp.add_handler(CommandHandler('ping',ping))
 #     dp.add_handler(CommandHandler('stark',stark))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
     dp.add_handler(MessageHandler(Filters.text, message_received))
