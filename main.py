@@ -5,6 +5,7 @@ import logging
 # from uuid import uuid4
 from telegram.utils.helpers import escape_markdown
 import random
+from pythonping import ping
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 
@@ -43,8 +44,8 @@ def start(update, context):
 def echo(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
 
-def sleeping(update, context):
-    print("Inside sleeping()")
+def message_received(update, context):
+#     print("Inside message_received()")
 #    if ((update.message.text.find("srijan") != -1) and ((update.message.text.find("sleep") != -1) or (update.message.text.find("wake") != -1) or (update.message.text.find("woke") != -1))):
 #        f = open("/home/openhabian/isSleeping","r")
 #        if (f.read()=="1\n"):
@@ -69,6 +70,11 @@ def inlinequery(bot, update):
             input_message_content=InputTextMessageContent(
                 query))]
     update.inline_query.answer(results)
+    
+def ping(update, context):
+    ping_result = ping('8.8.8.8')
+    chat_id = update.message.chat_id
+    context.bot.send_message(chat_id=update.message.chat_id, text="Result: "+ping_result+" ms")
 
 def main():
     updater = Updater('2113253226:AAHH4MMbAQieoxDQWZmpll3aJPMW6C9G4_M')
@@ -78,7 +84,7 @@ def main():
     dp.add_handler(CommandHandler('bop',bop))
 #     dp.add_handler(CommandHandler('stark',stark))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
-    dp.add_handler(MessageHandler(Filters.text, sleeping))
+    dp.add_handler(MessageHandler(Filters.text, message_received))
     dp.add_handler(InlineQueryHandler(inlinequery))
     updater.start_polling()
     updater.idle()
