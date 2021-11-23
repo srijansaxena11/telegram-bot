@@ -82,15 +82,40 @@ def ping(update, context):
 def countdown(update, context):
     message_args = update.message.text.split(' ')
     try:
-        time = int(message_args[1])
+        time = message_args[1]
     except IndexError:
         time = 0
-    context.bot.send_message(chat_id=update.message.chat_id, text=f'Starting countdown for {time} seconds')
-    reply = context.bot.send_message(chat_id=update.message.chat_id, text=time) 
-    while(time>0):
+        
+    if (string.find('s') == -1):
+        if (string.find('m') == -1):
+            if (string.find('h') == -1):
+                time_in_seconds = 0
+            else:
+                #code for time in hours
+                try:
+                    time_in_hours = time.split('h')[0]
+                except IndexError:
+                    time_in_hours = 0
+                time_in_seconds = time_in_hours*3600
+        else:
+            #code for time in minutes
+            try:
+                time_in_minutes = time.split('m')[0]
+            except IndexError:
+                time_in_minutes = 0
+            time_in_seconds = time_in_minutes*60
+    else:
+        #code for time in seconds
+        try:
+            time_in_seconds = time.split('s')[0]
+        except IndexError:
+            time_in_seconds = 0
+    context.bot.send_message(chat_id=update.message.chat_id, text=f'Starting countdown for {time_in_seconds} seconds')
+    reply = context.bot.send_message(chat_id=update.message.chat_id, text=time_in_seconds) 
+    while(time_in_seconds>0):
         sleep(1)
-        time-=1
-        context.bot.edit_message_text(text=time, message_id=reply.message_id,
+        time_in_seconds-=1
+        context.bot.edit_message_text(text=time_in_seconds, message_id=reply.message_id,
                               chat_id=reply.chat.id)
         
     context.bot.send_message(chat_id=update.message.chat_id, text='Countdown finished')
