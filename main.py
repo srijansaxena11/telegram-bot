@@ -6,6 +6,7 @@ import logging
 from telegram.utils.helpers import escape_markdown
 import random
 import time
+from time import sleep
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 
@@ -87,10 +88,11 @@ def countdown(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text=f'Starting countdown for {time} seconds')
     reply = context.bot.send_message(chat_id=update.message.chat_id, text=time) 
     while(time>0):
+        sleep(1)
         time-=1
         context.bot.edit_message_text(text=time, message_id=reply.message_id,
                               chat_id=reply.chat.id)
-        sleep(1)
+        
     context.bot.send_message(chat_id=update.message.chat_id, text='Countdown finished')
     
 def main():
