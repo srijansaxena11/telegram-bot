@@ -21,12 +21,12 @@ def get_url():
     url = contents['url']
     return url
 
-# def stark(update, context):
-#     f = open("/etc/openhab2/scripts/tony_stark_quotes.txt","r")
-#     r = random.randint(0,49)
-#     lines = f.readlines()
-#     quote = lines[r]
-#     context.bot.send_message(chat_id=update.message.chat_id, text=quote)
+def stark(update, context):
+    f = open("tony_stark_quotes.txt","r")
+    r = random.randint(0,49)
+    lines = f.readlines()
+    quote = lines[r]
+    context.bot.send_message(chat_id=update.message.chat_id, text=quote)
 
 def eth(update, context):
     print("Inside eth()")
@@ -128,7 +128,7 @@ def main():
     dp.add_handler(CommandHandler('bop',bop))
     dp.add_handler(CommandHandler('ping',ping))
     dp.add_handler(CommandHandler('countdown',countdown))
-#     dp.add_handler(CommandHandler('stark',stark))
+    dp.add_handler(CommandHandler('stark',stark))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
     dp.add_handler(MessageHandler(Filters.text, message_received))
     dp.add_handler(InlineQueryHandler(inlinequery))
