@@ -30,8 +30,8 @@ def stark(update, context):
 
 def eth(update, context):
     print("Inside eth()")
-    rate = get_eth_rate_inr()
-    context.bot.send_message(chat_id=update.message.chat_id, text=rate)
+    rate = get_eth_rate_inr().split('0')[0]
+    context.bot.send_message(chat_id=update.message.chat_id, text=f'Current price of Ethereum is Rs. {rate}')
 
 def bop(update, context):
     url = get_url()
