@@ -86,9 +86,9 @@ def countdown(update, context):
     except IndexError:
         time = 0
         
-    if (string.find('s') == -1):
-        if (string.find('m') == -1):
-            if (string.find('h') == -1):
+    if (time.find('s') == -1):
+        if (time.find('m') == -1):
+            if (time.find('h') == -1):
                 time_in_seconds = 0
             else:
                 #code for time in hours
