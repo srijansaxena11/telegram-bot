@@ -81,9 +81,9 @@ def ping(update, context):
 def countdown(update, context):
     message_args = update.message.text.split(' ')
     try:
-        time = message_args[1]
+        time = int(message_args[1])
     except IndexError:
-        time = ''
+        time = 0
     context.bot.send_message(chat_id=update.message.chat_id, text=f'Starting countdown for {time} seconds')
     reply = context.bot.send_message(chat_id=update.message.chat_id, text=time) 
     while(time>0):
