@@ -93,21 +93,21 @@ def countdown(update, context):
             else:
                 #code for time in hours
                 try:
-                    time_in_hours = time.split('h')[0]
+                    time_in_hours = int(time.split('h')[0])
                 except IndexError:
                     time_in_hours = 0
                 time_in_seconds = time_in_hours*3600
         else:
             #code for time in minutes
             try:
-                time_in_minutes = time.split('m')[0]
+                time_in_minutes = int(time.split('m')[0])
             except IndexError:
                 time_in_minutes = 0
             time_in_seconds = time_in_minutes*60
     else:
         #code for time in seconds
         try:
-            time_in_seconds = time.split('s')[0]
+            time_in_seconds = int(time.split('s')[0])
         except IndexError:
             time_in_seconds = 0
     context.bot.send_message(chat_id=update.message.chat_id, text=f'Starting countdown for {time_in_seconds} seconds')
