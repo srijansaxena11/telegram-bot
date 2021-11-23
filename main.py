@@ -39,7 +39,7 @@ def bop(update, context):
 
 def start(update, context):
     #context.bot.send_message(chat_id=update.effective_chat.id, text="I'm a bot, please talk to me!")
-    context.bot.send_message(chat_id=update.message.chat_id, text="Hello. Good Morning/Noon/Evening, whatever it is. I am Srijan sir's Virtual Assistant. I am a bot if you didn't notice. I am developed to provide information or answer queries regarding Srijan sir. I'm still in very early phase of development. So, I may answer only a few questions at the moment. Also I'm not a regular bot. I'm a part time bot. I may not respond at certain times when Srijan sir has not turned on his server. Or he may even completely shut me down if I don't seem to be useful enough to consume processing, storage and bandwidth on Srijan sir's server. ")
+    context.bot.send_message(chat_id=update.message.chat_id, text="Hello. Good Morning/Noon/Evening, whatever it is. I am a bot if you didn't notice. I am developed to as a fun hobby and to test out a few things. Also I'm not a regular bot. I'm a part time bot. I may not even respond at certain times.")
 
 def echo(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
@@ -78,8 +78,21 @@ def ping(update, context):
     context.bot.edit_message_text(text=f'{end_time - start_time} ms', message_id=reply.message_id,
                               chat_id=reply.chat.id,
                               parse_mode='HTMl')
-#     editMessage(f'{end_time - start_time} ms', reply)
-
+def countdown(update, context):
+    message_args = update.message.text.split(' ')
+    try:
+        time = message_args[1]
+    except IndexError:
+        time = ''
+    context.bot.send_message(chat_id=update.message.chat_id, text=f'Starting countdown for {time} seconds')
+    reply = context.bot.send_message(chat_id=update.message.chat_id, text=time) 
+    while(time>0):
+        context.bot.edit_message_text(text=time, message_id=reply.message_id,
+                              chat_id=reply.chat.id)
+        time-=1
+        sleep(1)
+    context.bot.send_message(chat_id=update.message.chat_id, text='Countdown finished')
+    
 def main():
     updater = Updater('2113253226:AAHH4MMbAQieoxDQWZmpll3aJPMW6C9G4_M')
     dp = updater.dispatcher
@@ -87,6 +100,7 @@ def main():
     dp.add_handler(CommandHandler('eth',eth))
     dp.add_handler(CommandHandler('bop',bop))
     dp.add_handler(CommandHandler('ping',ping))
+    dp.add_handler(CommandHandler('countdown',countdown))
 #     dp.add_handler(CommandHandler('stark',stark))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
     dp.add_handler(MessageHandler(Filters.text, message_received))
