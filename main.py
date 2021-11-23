@@ -119,7 +119,17 @@ def countdown(update, context):
                               chat_id=reply.chat.id)
         
     context.bot.send_message(chat_id=update.message.chat_id, text='Countdown finished')
-    
+
+def get_current_temperature():
+    temp_api = requests.get('https://api.openweathermap.org/data/2.5/weather?id=1264733&appid=a72702debe3ebc2f16c3357591cb131e&units=metric').json()
+    current_temperature = temp_api['main']['temp']
+    feels_like_temperature = temp_api['main']['feels_like']
+    return [current_temperature,feels_like_temperature]
+
+def temperature(update, context):
+    current_temperature,feels_like_temperature = get_current_temperature()
+    context.bot.send_message(chat_id=update.message.chat_id, text=f'Current temperature in Lucknow is {current_temperature}°C. It feels like {feels_like_temperature}°C')      
+        
 def main():
     updater = Updater('2113253226:AAHH4MMbAQieoxDQWZmpll3aJPMW6C9G4_M')
     dp = updater.dispatcher
@@ -129,6 +139,7 @@ def main():
     dp.add_handler(CommandHandler('ping',ping))
     dp.add_handler(CommandHandler('countdown',countdown))
     dp.add_handler(CommandHandler('stark',stark))
+    dp.add_handler(CommandHandler('temp',temperature))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
     dp.add_handler(MessageHandler(Filters.text, message_received))
     dp.add_handler(InlineQueryHandler(inlinequery))
