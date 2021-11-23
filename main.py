@@ -87,9 +87,9 @@ def countdown(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text=f'Starting countdown for {time} seconds')
     reply = context.bot.send_message(chat_id=update.message.chat_id, text=time) 
     while(time>0):
+        time-=1
         context.bot.edit_message_text(text=time, message_id=reply.message_id,
                               chat_id=reply.chat.id)
-        time-=1
         sleep(1)
     context.bot.send_message(chat_id=update.message.chat_id, text='Countdown finished')
     
