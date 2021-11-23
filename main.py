@@ -75,8 +75,8 @@ def ping(update, context):
     start_time = int(round(time.time() * 1000))
     reply = context.bot.send_message(chat_id=update.message.chat_id, text="Starting Ping") #context.bot.send_message("Starting Ping", context.bot, update)
     end_time = int(round(time.time() * 1000))
-    context.bot.edit_message_text(text=f'{end_time - start_time} ms', message_id=update.message.message_id,
-                              chat_id=update.message.chat.id,
+    context.bot.edit_message_text(text=f'{end_time - start_time} ms', message_id=reply.message_id,
+                              chat_id=reply.chat.id,
                               parse_mode='HTMl')
 #     editMessage(f'{end_time - start_time} ms', reply)
 
