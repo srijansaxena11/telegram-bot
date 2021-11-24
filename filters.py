@@ -3,9 +3,9 @@ from telegram import Message
 
 
 class CustomFilters:
-    class _AuthorizedUserFilter(BaseFilter):
+    class AuthorizedUserFilter(BaseFilter):
         def filter(self, message):
             id = message.from_user.id
             return bool(id in [373228727])
 
-    authorized_user = _AuthorizedUserFilter()
+    authorized_user = AuthorizedUserFilter()
