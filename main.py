@@ -13,10 +13,10 @@ from commands import Commands
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 
 def is_allowed(update):
-    allowed = false
+    allowed = False
     user = update.message.from_user
     if user.id in [3732287271]:
-        allowed = true
+        allowed = True
     return allowed
 
 # def get_eth_rate_inr():
