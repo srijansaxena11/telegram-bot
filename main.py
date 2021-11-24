@@ -1,3 +1,4 @@
+import os
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler, MessageHandler, Filters, InlineQueryHandler
 from telegram import InlineQueryResultArticle, ParseMode, InputTextMessageContent
 # import requests
@@ -167,7 +168,7 @@ def temperature(update, context):
         context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
         
 def main():
-    updater = Updater(BOT_TOKEN)
+    updater = Updater(os.environ["BOT_TOKEN"])
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('start',start)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('eth',eth)) #,CustomFilters.authorized_user))
