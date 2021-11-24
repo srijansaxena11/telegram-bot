@@ -7,8 +7,16 @@ from telegram.utils.helpers import escape_markdown
 import random
 import time
 from time import sleep
+from filters import CustomFilters
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
+
+# def is_allowed(update):
+#     allowed = false
+#     user = update.message.from_user
+#     if user.id in [373228727]:
+#         allowed = true
+#     return allowed
 
 def get_eth_rate_inr():
     print("Inside get_eth_rate_inr()")
@@ -133,16 +141,16 @@ def temperature(update, context):
 def main():
     updater = Updater('2113253226:AAHH4MMbAQieoxDQWZmpll3aJPMW6C9G4_M')
     dp = updater.dispatcher
-    dp.add_handler(CommandHandler('start',start))
-    dp.add_handler(CommandHandler('eth',eth))
-    dp.add_handler(CommandHandler('bop',bop))
-    dp.add_handler(CommandHandler('ping',ping))
-    dp.add_handler(CommandHandler('countdown',countdown))
-    dp.add_handler(CommandHandler('stark',stark))
-    dp.add_handler(CommandHandler('temp',temperature))
+    dp.add_handler(CommandHandler('start',start,CustomFilters.authorized_user))
+    dp.add_handler(CommandHandler('eth',eth,CustomFilters.authorized_user))
+    dp.add_handler(CommandHandler('bop',bop,CustomFilters.authorized_user))
+    dp.add_handler(CommandHandler('ping',ping,CustomFilters.authorized_user))
+    dp.add_handler(CommandHandler('countdown',countdown,CustomFilters.authorized_user))
+    dp.add_handler(CommandHandler('stark',stark,CustomFilters.authorized_user))
+    dp.add_handler(CommandHandler('temp',temperature,CustomFilters.authorized_user))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
-    dp.add_handler(MessageHandler(Filters.text, message_received))
-    dp.add_handler(InlineQueryHandler(inlinequery))
+    dp.add_handler(MessageHandler(Filters.text, message_received,CustomFilters.authorized_user))
+#     dp.add_handler(InlineQueryHandler(inlinequery))
     updater.start_polling()
     updater.idle()
 
