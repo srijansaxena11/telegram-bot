@@ -8,6 +8,7 @@ import random
 import time
 from time import sleep
 # from filters import CustomFilters
+from commands import Commands
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 
@@ -38,7 +39,7 @@ def stark(update, context):
 
 def eth(update, context):
     print("Inside eth()")
-    rate = str(get_eth_rate_inr()).split('.')[0]
+    rate = str(Commands.get_eth_rate_inr()).split('.')[0]
     context.bot.send_message(chat_id=update.message.chat_id, text=f'Current price of Ethereum is Rs. {rate}')
 
 def bop(update, context):
