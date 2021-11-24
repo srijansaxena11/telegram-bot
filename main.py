@@ -15,7 +15,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 def is_allowed(update):
     allowed = False
     user = update.message.from_user
-    if user.id in [373228727]:
+    if user.id in [OWNER_ID]:
         allowed = True
     return allowed
 
@@ -167,7 +167,7 @@ def temperature(update, context):
         context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
         
 def main():
-    updater = Updater('2113253226:AAHH4MMbAQieoxDQWZmpll3aJPMW6C9G4_M')
+    updater = Updater(BOT_TOKEN)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('start',start)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('eth',eth)) #,CustomFilters.authorized_user))
