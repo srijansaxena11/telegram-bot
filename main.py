@@ -15,7 +15,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 def is_allowed(update):
     allowed = False
     user = update.message.from_user
-    if user.id in [3732287271]:
+    if user.id in [373228727]:
         allowed = True
     return allowed
 
