@@ -7,7 +7,7 @@ from telegram.utils.helpers import escape_markdown
 import random
 import time
 from time import sleep
-from filters import CustomFilters
+# from filters import CustomFilters
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 
