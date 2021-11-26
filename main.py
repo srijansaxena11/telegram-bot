@@ -169,7 +169,7 @@ def temperature(update, context):
         
 def info(update, context):
     if(is_allowed(update)):
-#         try:
+        try:
             sender = update.message.reply_to_message.from_user
             sender_id = sender.id
             is_sender_bot = sender.is_bot
@@ -179,9 +179,9 @@ def info(update, context):
             context.bot.send_message(chat_id=update.message.chat_id, 
                                      text=f'<b>User ID</b>: {sender_id}\n<b>Is User Bot</b>: {is_sender_bot}\n<b>User First Name</b>: {sender_first_name}\n<b>User Last Name</b>: {sender_last_name}\n<b>User username</b>: {sender_username}', 
                                      parse_mode='HTML')
-#         except:
-#             chat_id = update.message.chat_id
-#             context.bot.send_message(chat_id=update.message.chat_id, text=f'Current Chat ID: {chat_id}')
+        except:
+            chat_id = update.message.chat_id
+            context.bot.send_message(chat_id=update.message.chat_id, text=f'Current Chat ID: {chat_id}')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
         
@@ -196,7 +196,7 @@ def main():
     dp.add_handler(CommandHandler('stark',stark)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('temp',temperature)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('info',info))
-    dp.add_handler(MessageHandler(Filters.text, message_received)) #,CustomFilters.authorized_user))
+#     dp.add_handler(MessageHandler(Filters.text, message_received)) #,CustomFilters.authorized_user))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
 #     dp.add_handler(InlineQueryHandler(inlinequery))
     updater.start_polling()
