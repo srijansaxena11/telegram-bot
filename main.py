@@ -167,6 +167,22 @@ def temperature(update, context):
     else:
         context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
         
+def info(update, context):
+    if(is_allowed(update)):
+        try:
+            sender = update.message.reply_to_message.from_user
+            sender_id = sender.id
+            is_sender_bot = sender.is_bot
+            sender_first_name = sender.first_name 
+            sender_last_name = sender.last_name if sender.last_name is not None else ''
+            sender_username  = sender.username if sender.username is not None else ''
+            context.bot.send_message(chat_id=update.message.chat_id, text=f'Current temperature in Lucknow is {current_temperature}°C. It feels like {feels_like_temperature}°C')
+        except:
+            chat_id = update.message.chat_id
+            context.bot.send_message(chat_id=update.message.chat_id, text=f'Current Chat ID: {chat_id}°C')
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
+        
 def main():
     updater = Updater(os.environ["BOT_TOKEN"])
     dp = updater.dispatcher
@@ -177,6 +193,7 @@ def main():
     dp.add_handler(CommandHandler('countdown',countdown)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('stark',stark)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('temp',temperature)) #,CustomFilters.authorized_user))
+    dp.add_handler(CommandHandler('info',info))
     dp.add_handler(MessageHandler(Filters.text, message_received)) #,CustomFilters.authorized_user))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
 #     dp.add_handler(InlineQueryHandler(inlinequery))
