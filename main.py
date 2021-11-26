@@ -169,7 +169,7 @@ def temperature(update, context):
         
 def info(update, context):
     if(is_allowed(update)):
-        try:
+#         try:
             sender = update.message.reply_to_message.from_user
             sender_id = sender.id
             is_sender_bot = sender.is_bot
@@ -178,10 +178,10 @@ def info(update, context):
             sender_username  = sender.username if sender.username is not None else ''
             context.bot.send_message(chat_id=update.message.chat_id, 
                                      text=f'<b>User ID</b>: {sender_id}\n<b>Is User Bot</b>: {is_sender_bot}\n<b>User First Name</b>: {user_first_name}\n<b>User Last Name</b>: {user_last_name}\n<b>User username</b>: {sender_username}', 
-                                     parse_mode=telegram.ParseMode.HTML)
-        except:
-            chat_id = update.message.chat_id
-            context.bot.send_message(chat_id=update.message.chat_id, text=f'Current Chat ID: {chat_id}')
+                                     parse_mode='HTML')
+#         except:
+#             chat_id = update.message.chat_id
+#             context.bot.send_message(chat_id=update.message.chat_id, text=f'Current Chat ID: {chat_id}')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
         
