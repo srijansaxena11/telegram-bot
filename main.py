@@ -163,7 +163,7 @@ def countdown(update, context):
 def temperature(update, context):
     if(is_allowed(update)):
         current_temperature,feels_like_temperature = Commands.get_current_temperature()
-        context.bot.send_message(chat_id=update.message.chat_id, text=f'Current temperature in Lucknow is {current_temperature}°C. It feels like {feels_like_temperature}°C')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.id, text=f'Current temperature in Lucknow is {current_temperature}°C. It feels like {feels_like_temperature}°C')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
         
