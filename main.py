@@ -177,7 +177,7 @@ def info(update, context):
             sender_last_name = sender.last_name if sender.last_name is not None else ''
             sender_username  = sender.username if sender.username is not None else ''
             context.bot.send_message(chat_id=update.message.chat_id, 
-                                     text=f'<b>User ID</b>: {sender_id}\n<b>Is User Bot</b>: {is_sender_bot}\n<b>User First Name</b>: {user_first_name}\n<b>User Last Name</b>: {user_last_name}\n<b>User username</b>: {sender_username}', 
+                                     text=f'<b>User ID</b>: {sender_id}\n<b>Is User Bot</b>: {is_sender_bot}\n<b>User First Name</b>: {sender_first_name}\n<b>User Last Name</b>: {sender_last_name}\n<b>User username</b>: {sender_username}', 
                                      parse_mode='HTML')
 #         except:
 #             chat_id = update.message.chat_id
