@@ -170,19 +170,18 @@ def temperature(update, context):
 def info(update, context):
     if(is_allowed(update)):
         try:
-            print('checking sender')
             sender = update.message.reply_to_message.from_user
-            print(f'Sender: {sender.id}')
             sender_id = sender.id
-            print(f'Is Sender Bot: {sender.is_bot}')
             is_sender_bot = sender.is_bot
-            print(f'Sender first namet: {sender.first_name}')
-            sender_first_name = sender.first_name 
-            print(f'Sender last name: {sender.last_name}')
+            sender_first_name = sender.first_name
             sender_last_name = sender.last_name if sender.last_name is not None else ''
-            print(f'Sender username: {sender.username}')
             sender_username  = sender.username if sender.username is not None else ''
-            context.bot.send_message(chat_id=update.message.chat_id, text=f'All good')
+            context.bot.send_message(chat_id=update.message.chat_id, text=f'<b>User ID</b>: {sender_id}
+            <b>Is User Bot</b>: {is_sender_bot}
+            <b>User First Name</b>: {user_first_name}
+            <b>User Last Name</b>: {user_last_name}
+            <b>User username</b>: {sender_username}',
+                                    parse_mode=telegram.ParseMode.HTML)
         except:
             chat_id = update.message.chat_id
             context.bot.send_message(chat_id=update.message.chat_id, text=f'Current Chat ID: {chat_id}')
