@@ -37,17 +37,17 @@ def stark(update, context):
         r = random.randint(0,49)
         lines = f.readlines()
         quote = lines[r]
-        context.bot.send_message(chat_id=update.message.chat_id, text=quote)
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=quote)
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
 def eth(update, context):
     if(is_allowed(update)):
         print("Inside eth()")
         rate = str(Commands.get_eth_rate_inr()).split('.')[0]
-        context.bot.send_message(chat_id=update.message.chat_id, text=f'Current price of Ethereum is Rs. {rate}')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Current price of Ethereum is Rs. {rate}')
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
 def bop(update, context):
     if(is_allowed(update)):
@@ -55,37 +55,37 @@ def bop(update, context):
         chat_id = update.message.chat_id
         context.bot.send_photo(chat_id=chat_id, photo=url)
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
 def start(update, context):
     if(is_allowed(update)):
-        context.bot.send_message(chat_id=update.message.chat_id, text="Hello. Good Morning/Noon/Evening, whatever it is. I am a bot if you didn't notice. I am developed to as a fun hobby and to test out a few things. Also I'm not a regular bot. I'm a part time bot. I may not even respond at certain times.")
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text="Hello. Good Morning/Noon/Evening, whatever it is. I am a bot if you didn't notice. I am developed to as a fun hobby and to test out a few things. Also I'm not a regular bot. I'm a part time bot. I may not even respond at certain times.")
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
 def echo(update, context):
     if(is_allowed(update)):
-        context.bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=update.message.text)
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
 def message_received(update, context):
 #     print("Inside message_received()")
 #    if ((update.message.text.find("srijan") != -1) and ((update.message.text.find("sleep") != -1) or (update.message.text.find("wake") != -1) or (update.message.text.find("woke") != -1))):
 #        f = open("/home/openhabian/isSleeping","r")
 #        if (f.read()=="1\n"):
-#            bot.send_message(chat_id=update.message.chat_id, text="Yes, Srijan sir is sleeping currently. Don't you dare to disturb him.")
+#            bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text="Yes, Srijan sir is sleeping currently. Don't you dare to disturb him.")
 #        else:
-#            bot.send_message(chat_id=update.message.chat_id, text="No, Srijan sir is not sleeping currently. He may ignore you nonetheless.")
+#            bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text="No, Srijan sir is not sleeping currently. He may ignore you nonetheless.")
     if(is_allowed(update)):
         if ((update.message.text.find("hi") != -1) or (update.message.text.find("hello") != -1)):
-            context.bot.send_message(chat_id=update.message.chat_id, text="You are trying to initiate a conversation with a bot? You seriously need to find a hobby.")
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text="You are trying to initiate a conversation with a bot? You seriously need to find a hobby.")
         elif (update.message.text.find("bye") != -1):
-            context.bot.send_message(chat_id=update.message.chat_id, text="I don't even know you.")
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text="I don't even know you.")
         else:
-            context.bot.send_message(chat_id=update.message.chat_id, text="Either you are dumb or I am. I am bot in my initial phase and being worked upon. So fingers on you.\nP.S.: Command doesn't exist. Let @SrijanSaxena know to add the required command. ")
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text="Either you are dumb or I am. I am bot in my initial phase and being worked upon. So fingers on you.\nP.S.: Command doesn't exist. Let @SrijanSaxena know to add the required command. ")
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
 def inlinequery(bot, update):
     print("Inside inlinequery()")
@@ -102,13 +102,13 @@ def inlinequery(bot, update):
 def ping(update, context):
     if(is_allowed(update)):
         start_time = int(round(time.time() * 1000))
-        reply = context.bot.send_message(chat_id=update.message.chat_id, text="Starting Ping") #context.bot.send_message("Starting Ping", context.bot, update)
+        reply = context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text="Starting Ping") #context.bot.send_message("Starting Ping", context.bot, update)
         end_time = int(round(time.time() * 1000))
         context.bot.edit_message_text(text=f'{end_time - start_time} ms', message_id=reply.message_id,
                                   chat_id=reply.chat.id,
                                   parse_mode='HTMl')
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
         
 def countdown(update, context):
     if(is_allowed(update)):
@@ -150,9 +150,9 @@ def countdown(update, context):
             context.bot.edit_message_text(text=time_in_seconds, message_id=reply.message_id,
                                   chat_id=reply.chat.id)
 
-        context.bot.send_message(chat_id=update.message.chat_id, text='Countdown finished')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Countdown finished')
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
 # def get_current_temperature():
 #     temp_api = requests.get('https://api.openweathermap.org/data/2.5/weather?id=1264733&appid=a72702debe3ebc2f16c3357591cb131e&units=metric').json()
@@ -163,9 +163,9 @@ def countdown(update, context):
 def temperature(update, context):
     if(is_allowed(update)):
         current_temperature,feels_like_temperature = Commands.get_current_temperature()
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.id, text=f'Current temperature in Lucknow is {current_temperature}°C. It feels like {feels_like_temperature}°C')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, reply_to_message_id=update.message.message_id, text=f'Current temperature in Lucknow is {current_temperature}°C. It feels like {feels_like_temperature}°C')
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
         
 def info(update, context):
     if(is_allowed(update)):
@@ -176,14 +176,14 @@ def info(update, context):
             sender_first_name = sender.first_name
             sender_last_name = sender.last_name if sender.last_name is not None else ''
             sender_username  = sender.username if sender.username is not None else ''
-            context.bot.send_message(chat_id=update.message.chat_id, 
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, 
                                      text=f'<b>User ID</b>: {sender_id}\n<b>Is User Bot</b>: {is_sender_bot}\n<b>User First Name</b>: {sender_first_name}\n<b>User Last Name</b>: {sender_last_name}\n<b>User username</b>: @{sender_username}', 
                                      parse_mode='HTML')
         except:
             chat_id = update.message.chat_id
-            context.bot.send_message(chat_id=update.message.chat_id, text=f'Current Chat ID: {chat_id}')
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Current Chat ID: {chat_id}')
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
         
 def leave(update, context):
     user = update.message.from_user.id
@@ -195,7 +195,7 @@ def leave(update, context):
         chat_id=update.message.chat_id
         context.bot.leave_chat(chat_id)
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=None, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
         
 def main():
     updater = Updater(os.environ["BOT_TOKEN"])
