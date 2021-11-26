@@ -185,6 +185,18 @@ def info(update, context):
     else:
         context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
         
+def leave(update, context):
+  user = update.message.from_user.id
+  if(is_allowed(update)):
+      context.bot.send_message(chat_id=update.message.chat_id, 
+                        reply_to_message_id=None,
+                        parse_mode="markdown",
+                        text=f"F**k you all!")
+        chat_id=update.message.chat_id
+        context.bot.leave_chat(chat_id)
+  else:
+      context.bot.send_message(chat_id=update.message.chat_id, text='Who the f**k are you? You are not authorized.')
+        
 def main():
     updater = Updater(os.environ["BOT_TOKEN"])
     dp = updater.dispatcher
