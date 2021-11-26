@@ -176,12 +176,9 @@ def info(update, context):
             sender_first_name = sender.first_name
             sender_last_name = sender.last_name if sender.last_name is not None else ''
             sender_username  = sender.username if sender.username is not None else ''
-            context.bot.send_message(chat_id=update.message.chat_id, text=f'<b>User ID</b>: {sender_id}
-            <b>Is User Bot</b>: {is_sender_bot}
-            <b>User First Name</b>: {user_first_name}
-            <b>User Last Name</b>: {user_last_name}
-            <b>User username</b>: {sender_username}',
-                                    parse_mode=telegram.ParseMode.HTML)
+            context.bot.send_message(chat_id=update.message.chat_id, 
+                                     text=f'<b>User ID</b>: {sender_id}\n<b>Is User Bot</b>: {is_sender_bot}\n<b>User First Name</b>: {user_first_name}\n<b>User Last Name</b>: {user_last_name}\n<b>User username</b>: {sender_username}', 
+                                     parse_mode=telegram.ParseMode.HTML)
         except:
             chat_id = update.message.chat_id
             context.bot.send_message(chat_id=update.message.chat_id, text=f'Current Chat ID: {chat_id}')
