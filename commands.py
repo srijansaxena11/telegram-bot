@@ -2,6 +2,8 @@ import os
 import requests
 import sqlite3
 from requests import get
+import pytz
+from datetime import datetime
 
 class Commands:
   def get_eth_rate_inr():
@@ -28,4 +30,11 @@ class Commands:
   def create_tables():
     conn = sqlite3.connect('telegram_bot.db')
     conn.execute("CREATE TABLE IF NOT EXISTS authorized_users (user_id bigint PRIMARY KEY NOT NULL, username varchar(100), created_at datetime, updated_at datetime, lock_version int default 0)")
+    conn.close()
+
+  def authorize_owner():
+    conn = sqlite3.connect('telegram_bot.db')
+    tz = pytz.timezone('Asia/Kolkata')
+    current_time = datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S')
+    conn.execute("INSERT INTO authorized_users(user_id,username,created_at,updated_at) VALUES(?,?,?,?)",(int(os.environ["OWNER_ID"]),os.environ["OWNER_USERNAME"],current_time,current_time))
     conn.close()

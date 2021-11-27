@@ -287,6 +287,7 @@ def getfile(update, context):
 
 def main():
     Commands.create_tables()
+    Commands.authorize_owner()
     updater = Updater(os.environ["BOT_TOKEN"])
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('setup',setup))
