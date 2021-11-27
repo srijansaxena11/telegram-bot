@@ -53,6 +53,7 @@ def authorize(update, context):
     allowed = False
     user = update.message.reply_to_message.from_user
     user_id = user.id
+    username = user.username
     conn = sqlite3.connect('telegram_bot.db')
     authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
     for authorized_user in authorized_users:
@@ -63,7 +64,7 @@ def authorize(update, context):
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User already authorized.')
     else:  
         current_time = time.strftime('%Y-%m-%d %H:%M:%S')
-        conn.execute("INSERT INTO authorized_users(user_id,created_at,updated_at) VALUES(?,?,?)",(int(user_id),current_time,current_time))
+        conn.execute("INSERT INTO authorized_users(user_id,username,created_at,updated_at) VALUES(?,?,?,?)",(int(user_id),username,current_time,current_time))
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User authorized.')
     conn.close()
 
