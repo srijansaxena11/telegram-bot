@@ -40,7 +40,12 @@ class Commands:
     conn.commit()
     conn.close()
 
-  def turn_on(item):
+  def switch_on(item):
     headers = {'content-type': 'text/plain', 'accept': 'application/json'}
     response = requests.post(f'https://home.myopenhab.org/rest/items/{item}', 'ON', auth=requests.auth.HTTPBasicAuth('srijan.saxena0@gmail.com', 'srijan*1'), headers=headers)
+    return response.status_code
+
+  def switch_off(item):
+    headers = {'content-type': 'text/plain', 'accept': 'application/json'}
+    response = requests.post(f'https://home.myopenhab.org/rest/items/{item}', 'OFF', auth=requests.auth.HTTPBasicAuth('srijan.saxena0@gmail.com', 'srijan*1'), headers=headers)
     return response.status_code

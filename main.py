@@ -297,11 +297,30 @@ def on(update, context):
         if item == '':
             context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Provide the item name to switch on.')
         else:
-            response_code = Commands.turn_on(item)
+            response_code = Commands.switch_on(item)
             if response_code == 200:
                 message_to_be_sent = f'Successfully switched on {item}'
             else:
                 message_to_be_sent = f'There was an error switching on {item}. Please check the item name again.'
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=message_to_be_sent)
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
+
+def off(update, context):
+    if(is_owner(update)):
+        message_args = update.message.text.split(' ')
+        try:
+            item = message_args[1]
+        except IndexError:
+            item = ''
+        if item == '':
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Provide the item name to switch off.')
+        else:
+            response_code = Commands.switch_off(item)
+            if response_code == 200:
+                message_to_be_sent = f'Successfully switched off {item}'
+            else:
+                message_to_be_sent = f'There was an error switching off {item}. Please check the item name again.'
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=message_to_be_sent)
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
