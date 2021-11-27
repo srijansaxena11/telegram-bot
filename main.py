@@ -24,7 +24,7 @@ def setup(update, context):
 
 def create_tables():
     conn = sqlite3.connect('telegram_bot.db')
-    conn.execute("CREATE TABLE IF NOT EXISTS authorized_users (user_id bigint PRIMARY KEY NOT NULL, created_at datetime, updated_at datetime, lock_version int default 0)")
+    conn.execute("CREATE TABLE IF NOT EXISTS authorized_users (user_id bigint PRIMARY KEY NOT NULL, username varchar(100), created_at datetime, updated_at datetime, lock_version int default 0)")
     conn.close()
 
 def is_owner(update):
@@ -84,6 +84,19 @@ def unauthorize(update, context):
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User not authorized.')
     conn.close()
+
+def listauthusers(update, context):
+    if(is_allowed(update)):
+        authorized_username_array = []
+        conn = sqlite3.connect('telegram_bot.db')
+        authorized_users = conn.execute("SELECT user_id,username FROM authorized_users WHERE lock_version<>-1")
+        for authorized_user in authorized_users:
+            authorized_username_array.append(authorized_user[1])
+        conn.close()
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'List of authorized users:\n{'\n'.join(authorized_username_array)}')
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
+
 
 def stark(update, context):
     if(is_allowed(update)):
@@ -275,6 +288,7 @@ def main():
     dp.add_handler(CommandHandler('setup',setup))
     dp.add_handler(CommandHandler('authorize',authorize))
     dp.add_handler(CommandHandler('unauthorize',unauthorize))
+    dp.add_handler(CommandHandler('listauthusers',listauthusers))
     dp.add_handler(CommandHandler('start',start)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('eth',eth)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('bop',bop)) #,CustomFilters.authorized_user))
