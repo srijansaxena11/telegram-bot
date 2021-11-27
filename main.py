@@ -56,13 +56,13 @@ def authorize(update, context):
     conn = sqlite3.connect('telegram_bot.db')
     authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
     for authorized_user in authorized_users:
-        if user_id == int(authorized_user):
+        if int(user_id) == int(authorized_user):
             allowed = True
             break
     if allowed:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User already authorized.')
     else:
-        conn.execute("INSERT INTO authorized_users(user_id,created_at,updated_at) VALUES(?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)",user_id)
+        conn.execute("INSERT INTO authorized_users(user_id,created_at,updated_at) VALUES(?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)",int(user_id))
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User authorized.')
     conn.close()
 
@@ -73,11 +73,11 @@ def unauthorize(update, context):
     conn = sqlite3.connect('telegram_bot.db')
     authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
     for authorized_user in authorized_users:
-        if user.id == int(authorized_user):
+        if int(user_id) == int(authorized_user):
             allowed = True
             break
     if allowed:
-        conn.execute("UPDATE authorized_users set lock_version=-1, created_at= CURRENT_TIMESTAMP, updated_at=CURRENT_TIMESTAMP where user_id=? and lock_version<>-1",user_id)
+        conn.execute("UPDATE authorized_users set lock_version=-1, created_at= CURRENT_TIMESTAMP, updated_at=CURRENT_TIMESTAMP where user_id=? and lock_version<>-1",int(user_id))
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User unauthorized.')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User not authorized.')
