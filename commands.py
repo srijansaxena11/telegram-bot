@@ -1,5 +1,7 @@
 import os
 import requests
+import sqlite3
+from requests import get
 
 class Commands:
   def get_eth_rate_inr():
@@ -18,3 +20,7 @@ class Commands:
     current_temperature = temp_api['main']['temp']
     feels_like_temperature = temp_api['main']['feels_like']
     return [current_temperature,feels_like_temperature]
+
+  def get_ip():
+    ip = get('https://api.ipify.org').content.decode('utf8')
+    return ip

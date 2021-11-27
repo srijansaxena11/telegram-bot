@@ -14,19 +14,74 @@ import sqlite3
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 
-def test(update, context):
+def setup(update, context):
+    if(is_allowed(update)):
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Performing Setup. Please wait...')
+        create_tables()
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Setup Done!')
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
+
+def create_tables():
     conn = sqlite3.connect('teleram_bot.db')
-    print ("Opened database successfully")
-    conn.execute("CREATE TABLE authorized_users (user_id bigint PRIMARY KEY NOT NULL, created_at datetime, updated_at datetime, lock_version int default 0)")
-    print ("Table created successfully")
+    conn.execute("CREATE TABLE IF NOT EXISTS authorized_users (user_id bigint PRIMARY KEY NOT NULL, created_at datetime, updated_at datetime, lock_version int default 0)")
     conn.close()
+
+def is_owner(update):
+    allowed = False
+    user = update.message.from_user
+    if user.id = int(os.environ["OWNER_ID"]):
+        allowed = True
+    return allowed
 
 def is_allowed(update):
     allowed = False
-    user = update.message.from_user
-    if user.id in [int(os.environ["OWNER_ID"])]:
+    if is_owner(update):
         allowed = True
+    else:
+        user = update.message.from_user
+        conn = sqlite3.connect('teleram_bot.db')
+        authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
+        for authorized_user in authorized_users:
+            if user.id = int(authorized_user):
+                allowed = True
+                break  
+        conn.close()
     return allowed
+
+def authorize(update, context):
+    allowed = False
+    user = update.message.reply_to_message.from_user
+    user_id = user.id
+    conn = sqlite3.connect('teleram_bot.db')
+    authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
+    for authorized_user in authorized_users:
+        if user.id = int(authorized_user):
+            allowed = True
+            break
+    if allowed:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User already authorized.')
+    else:
+        conn.execute("INSERT INTO authorized_users(user_id,created_at,updated_at) VALUES(?,now(),now())")
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User authorized.')
+    conn.close()
+
+def unauthorize(update, context):
+    allowed = False
+    user = update.message.reply_to_message.from_user
+    user_id = user.id
+    conn = sqlite3.connect('teleram_bot.db')
+    authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
+    for authorized_user in authorized_users:
+        if user.id = int(authorized_user):
+            allowed = True
+            break
+    if allowed:
+        conn.execute("UPDATE authorized_users set lock_version=-1, created_at= now(), updated_at=now() where user_id=? and lock_version<>-1",user_id)
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User unauthorized.')
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User not authorized.')
+    conn.close()
 
 # def get_eth_rate_inr():
 #     print("Inside get_eth_rate_inr()")
@@ -178,14 +233,14 @@ def temperature(update, context):
 def info(update, context):
     if(is_allowed(update)):
         try:
-            sender = update.message.reply_to_message.from_user
-            sender_id = sender.id
-            is_sender_bot = sender.is_bot
-            sender_first_name = sender.first_name
-            sender_last_name = sender.last_name if sender.last_name is not None else ''
-            sender_username  = sender.username if sender.username is not None else ''
+            user = update.message.reply_to_message.from_user
+            user_id = user.id
+            is_user_bot = user.is_bot
+            user_first_name = user.first_name
+            user_last_name = user.last_name if user.last_name is not None else ''
+            user_username  = user.username if user.username is not None else ''
             context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, 
-                                     text=f'<b>User ID</b>: {sender_id}\n<b>Is User Bot</b>: {is_sender_bot}\n<b>User First Name</b>: {sender_first_name}\n<b>User Last Name</b>: {sender_last_name}\n<b>User username</b>: @{sender_username}', 
+                                     text=f'<b>User ID</b>: {user_id}\n<b>Is User Bot</b>: {is_user_bot}\n<b>User First Name</b>: {user_first_name}\n<b>User Last Name</b>: {user_last_name}\n<b>User username</b>: @{user_username}', 
                                      parse_mode='HTML')
         except:
             chat_id = update.message.chat_id
@@ -198,8 +253,19 @@ def leave(update, context):
     if(is_allowed(update)):
         context.bot.send_message(chat_id=update.message.chat_id, 
                         reply_to_message_id=None,
-                        parse_mode="markdown",
-                        text=f"F**k you all!")
+                        text="F**k you all!")
+        chat_id=update.message.chat_id
+        context.bot.leave_chat(chat_id)
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
+
+
+def ip(update, context):
+    if(is_allowed(update)):
+        ip = Commands.get_ip()
+        context.bot.send_message(chat_id=update.message.chat_id, 
+                        reply_to_message_id=reply_to_message_id=update.message.message_id,
+                        text=f"Public IP address: {ip}")
         chat_id=update.message.chat_id
         context.bot.leave_chat(chat_id)
     else:
@@ -208,7 +274,7 @@ def leave(update, context):
 def main():
     updater = Updater(os.environ["BOT_TOKEN"])
     dp = updater.dispatcher
-    dp.add_handler(CommandHandler('test',test))
+    dp.add_handler(CommandHandler('setup',setup))
     dp.add_handler(CommandHandler('start',start)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('eth',eth)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('bop',bop)) #,CustomFilters.authorized_user))
