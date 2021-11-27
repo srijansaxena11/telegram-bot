@@ -1,14 +1,12 @@
 import os
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler, MessageHandler, Filters, InlineQueryHandler
 from telegram import InlineQueryResultArticle, ParseMode, InputTextMessageContent
-# import requests
 import logging
 # from uuid import uuid4
 from telegram.utils.helpers import escape_markdown
 import random
 import time
 from time import sleep
-# from filters import CustomFilters
 from commands import Commands
 import sqlite3
 import pytz
@@ -289,6 +287,25 @@ def getfile(update, context):
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')
 
+def on(update, context):
+    if(is_owner(update)):
+        message_args = update.message.text.split(' ')
+        try:
+            item = message_args[1]
+        except IndexError:
+            item = ''
+        if item == '':
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Provide the item name to switch on.')
+        else:
+            response_code = Commands.turn_on(item)
+            if response_code == 200:
+                message_to_be_sent = f'Successfully switched on {item}'
+            else:
+                message_to_be_sent = f'There was an error switching on {item}. Please check the item name again.'
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=message_to_be_sent)
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
+
 def main():
     Commands.create_tables()
     Commands.authorize_owner()
@@ -309,6 +326,8 @@ def main():
     dp.add_handler(CommandHandler('leave',leave))
     dp.add_handler(CommandHandler('ip',ip))
     dp.add_handler(CommandHandler('getfile',getfile))
+    dp.add_handler(CommandHandler('on',on))
+    dp.add_handler(CommandHandler('off',off))
 #     dp.add_handler(MessageHandler(Filters.text, message_received)) #,CustomFilters.authorized_user))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
 #     dp.add_handler(InlineQueryHandler(inlinequery))

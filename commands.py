@@ -39,3 +39,8 @@ class Commands:
     conn.execute("INSERT INTO authorized_users(user_id,username,created_at,updated_at) VALUES(?,?,?,?)",(int(os.environ["OWNER_ID"]),os.environ["OWNER_USERNAME"],current_time,current_time))
     conn.commit()
     conn.close()
+
+  def turn_on(item):
+    headers = {'content-type': 'text/plain', 'accept': 'application/json'}
+    response = requests.post(f'https://home.myopenhab.org/rest/items/{item}', 'ON', auth=requests.auth.HTTPBasicAuth('srijan.saxena0@gmail.com', 'srijan*1'), headers=headers)
+    return response.status_code
