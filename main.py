@@ -11,6 +11,7 @@ from time import sleep
 # from filters import CustomFilters
 from commands import Commands
 import sqlite3
+import pytz
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 
@@ -21,11 +22,6 @@ def setup(update, context):
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Setup Done!')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
-
-def create_tables():
-    conn = sqlite3.connect('telegram_bot.db')
-    conn.execute("CREATE TABLE IF NOT EXISTS authorized_users (user_id bigint PRIMARY KEY NOT NULL, username varchar(100), created_at datetime, updated_at datetime, lock_version int default 0)")
-    conn.close()
 
 def is_owner(update):
     allowed = False
@@ -43,7 +39,7 @@ def is_allowed(update):
         conn = sqlite3.connect('telegram_bot.db')
         authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
         for authorized_user in authorized_users:
-            if user.id == int(authorized_user):
+            if user.id == int(authorized_user[0]):
                 allowed = True
                 break  
         conn.close()
@@ -57,13 +53,14 @@ def authorize(update, context):
     conn = sqlite3.connect('telegram_bot.db')
     authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
     for authorized_user in authorized_users:
-        if int(user_id) == int(authorized_user):
+        if int(user_id) == int(authorized_user[0]):
             allowed = True
             break
     if allowed:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User already authorized.')
     else:  
-        current_time = time.strftime('%Y-%m-%d %H:%M:%S')
+        tz = pytz.timezone('Asia/Kolkata')
+        current_time = datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S')
         conn.execute("INSERT INTO authorized_users(user_id,username,created_at,updated_at) VALUES(?,?,?,?)",(int(user_id),username,current_time,current_time))
         conn.commit()
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User authorized.')
@@ -76,11 +73,12 @@ def unauthorize(update, context):
     conn = sqlite3.connect('telegram_bot.db')
     authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
     for authorized_user in authorized_users:
-        if int(user_id) == int(authorized_user):
+        if int(user_id) == int(authorized_user[0]):
             allowed = True
             break
     if allowed:
-        current_time = time.strftime('%Y-%m-%d %H:%M:%S')
+        tz = pytz.timezone('Asia/Kolkata')
+        current_time = datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S')
         conn.execute("UPDATE authorized_users set lock_version=-1, created_at= ?, updated_at=? where user_id=? and lock_version<>-1",(int(user_id),current_time,current_time))
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User unauthorized.')
     else:
@@ -93,7 +91,7 @@ def listauthusers(update, context):
         conn = sqlite3.connect('telegram_bot.db')
         authorized_users = conn.execute("SELECT user_id,username FROM authorized_users WHERE lock_version<>-1")
         for authorized_user in authorized_users:
-            authorized_usernames_array.append(authorized_user[1])
+            authorized_usernames_array.append(f'@{authorized_user[1]}')
         conn.close()
         authorized_usernames_string='\n'.join(authorized_usernames_array)
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'List of authorized users:\n{authorized_usernames_string}')
@@ -286,6 +284,7 @@ def getfile(update, context):
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
 def main():
+    Commands.create_tables()
     updater = Updater(os.environ["BOT_TOKEN"])
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('setup',setup))
