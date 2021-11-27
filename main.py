@@ -14,7 +14,7 @@ import sqlite3
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 
-def test():
+def test(update, context):
     conn = sqlite3.connect('teleram_bot.db')
     print ("Opened database successfully")
     conn.execute('''CREATE TABLE authorized_users
