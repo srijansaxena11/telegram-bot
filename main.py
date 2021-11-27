@@ -23,7 +23,7 @@ def setup(update, context):
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
 def create_tables():
-    conn = sqlite3.connect('teleram_bot.db')
+    conn = sqlite3.connect('telegram_bot.db')
     conn.execute("CREATE TABLE IF NOT EXISTS authorized_users (user_id bigint PRIMARY KEY NOT NULL, created_at datetime, updated_at datetime, lock_version int default 0)")
     conn.close()
 
@@ -271,6 +271,8 @@ def main():
     updater = Updater(os.environ["BOT_TOKEN"])
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('setup',setup))
+    dp.add_handler(CommandHandler('authorize',authorize))
+    dp.add_handler(CommandHandler('unauthorize',unauthorize))
     dp.add_handler(CommandHandler('start',start)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('eth',eth)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('bop',bop)) #,CustomFilters.authorized_user))
