@@ -37,4 +37,5 @@ class Commands:
     tz = pytz.timezone('Asia/Kolkata')
     current_time = datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S')
     conn.execute("INSERT INTO authorized_users(user_id,username,created_at,updated_at) VALUES(?,?,?,?)",(int(os.environ["OWNER_ID"]),os.environ["OWNER_USERNAME"],current_time,current_time))
+    conn.commit()
     conn.close()
