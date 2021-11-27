@@ -65,6 +65,7 @@ def authorize(update, context):
     else:  
         current_time = time.strftime('%Y-%m-%d %H:%M:%S')
         conn.execute("INSERT INTO authorized_users(user_id,username,created_at,updated_at) VALUES(?,?,?,?)",(int(user_id),username,current_time,current_time))
+        conn.commit()
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User authorized.')
     conn.close()
 
