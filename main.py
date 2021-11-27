@@ -267,6 +267,7 @@ def main():
     dp.add_handler(CommandHandler('temp',temperature)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('info',info))
     dp.add_handler(CommandHandler('leave',leave))
+    dp.add_handler(CommandHandler('ip',ip))
 #     dp.add_handler(MessageHandler(Filters.text, message_received)) #,CustomFilters.authorized_user))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
 #     dp.add_handler(InlineQueryHandler(inlinequery))
