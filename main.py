@@ -17,12 +17,12 @@ from datetime import datetime
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 
 def setup(update, context):
-    if(is_allowed(update)):
+    if(is_owner(update)):
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Performing Setup. Please wait...')
         create_tables()
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Setup Done!')
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')
 
 def is_owner(update):
     allowed = False
@@ -47,58 +47,64 @@ def is_allowed(update):
     return allowed
 
 def authorize(update, context):
-    allowed = False
-    user = update.message.reply_to_message.from_user
-    user_id = user.id
-    username = user.username
-    conn = sqlite3.connect('telegram_bot.db')
-    authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
-    for authorized_user in authorized_users:
-        if int(user_id) == int(authorized_user[0]):
-            allowed = True
-            break
-    if allowed:
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User already authorized.')
-    else:  
-        tz = pytz.timezone('Asia/Kolkata')
-        current_time = datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S')
-        conn.execute("INSERT INTO authorized_users(user_id,username,created_at,updated_at) VALUES(?,?,?,?)",(int(user_id),username,current_time,current_time))
-        conn.commit()
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User authorized.')
-    conn.close()
+    if(is_owner(update)):
+        allowed = False
+        user = update.message.reply_to_message.from_user
+        user_id = user.id
+        username = user.username
+        conn = sqlite3.connect('telegram_bot.db')
+        authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
+        for authorized_user in authorized_users:
+            if int(user_id) == int(authorized_user[0]):
+                allowed = True
+                break
+        if allowed:
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User already authorized.')
+        else:  
+            tz = pytz.timezone('Asia/Kolkata')
+            current_time = datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S')
+            conn.execute("INSERT INTO authorized_users(user_id,username,created_at,updated_at) VALUES(?,?,?,?)",(int(user_id),username,current_time,current_time))
+            conn.commit()
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User authorized.')
+        conn.close()
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')
 
 def unauthorize(update, context):
-    allowed = False
-    user = update.message.reply_to_message.from_user
-    user_id = user.id
-    conn = sqlite3.connect('telegram_bot.db')
-    authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
-    for authorized_user in authorized_users:
-        if int(user_id) == int(authorized_user[0]):
-            allowed = True
-            break
-    if allowed:
-        tz = pytz.timezone('Asia/Kolkata')
-        current_time = datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S')
-        conn.execute("UPDATE authorized_users set lock_version=-1, created_at= ?, updated_at=? where user_id=? and lock_version<>-1",(int(user_id),current_time,current_time))
-        conn.commit()
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User unauthorized.')
+    if(is_owner(update)):
+        allowed = False
+        user = update.message.reply_to_message.from_user
+        user_id = user.id
+        conn = sqlite3.connect('telegram_bot.db')
+        authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
+        for authorized_user in authorized_users:
+            if int(user_id) == int(authorized_user[0]):
+                allowed = True
+                break
+        if allowed:
+            tz = pytz.timezone('Asia/Kolkata')
+            current_time = datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S')
+            conn.execute("UPDATE authorized_users set lock_version=-1, created_at= ?, updated_at=? where user_id=? and lock_version<>-1",(int(user_id),current_time,current_time))
+            conn.commit()
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User unauthorized.')
+        else:
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User not authorized.')
+        conn.close()
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User not authorized.')
-    conn.close()
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')
 
 def listauthusers(update, context):
-    if(is_allowed(update)):
-        authorized_usernames_array = []
-        conn = sqlite3.connect('telegram_bot.db')
-        authorized_users = conn.execute("SELECT user_id,username FROM authorized_users WHERE lock_version<>-1")
-        for authorized_user in authorized_users:
-            authorized_usernames_array.append(f'@{authorized_user[1]}')
-        conn.close()
-        authorized_usernames_string='\n'.join(authorized_usernames_array)
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'List of authorized users:\n{authorized_usernames_string}')
-    else:
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
+    # if(is_allowed(update)):
+    authorized_usernames_array = []
+    conn = sqlite3.connect('telegram_bot.db')
+    authorized_users = conn.execute("SELECT user_id,username FROM authorized_users WHERE lock_version<>-1")
+    for authorized_user in authorized_users:
+        authorized_usernames_array.append(f'@{authorized_user[1]}')
+    conn.close()
+    authorized_usernames_string='\n'.join(authorized_usernames_array)
+    context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'List of authorized users:\n{authorized_usernames_string}')
+    # else:
+    #     context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
 
 def stark(update, context):
@@ -250,16 +256,14 @@ def info(update, context):
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
         
 def leave(update, context):
-    user = update.message.from_user.id
-    if(is_allowed(update)):
+    if(is_owner(update)):
         context.bot.send_message(chat_id=update.message.chat_id, 
                         reply_to_message_id=None,
                         text="F**k you all!")
         chat_id=update.message.chat_id
         context.bot.leave_chat(chat_id)
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
-
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')
 
 def ip(update, context):
     if(is_allowed(update)):
@@ -271,7 +275,7 @@ def ip(update, context):
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
 def getfile(update, context):
-    if(is_allowed(update)):
+    if(is_owner(update)):
         message_args = update.message.text.split(' ')
         try:
             file_name = message_args[1]
@@ -283,7 +287,7 @@ def getfile(update, context):
             file = open(file_name, 'rb')
             context.bot.sendDocument(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, document=file)
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')
 
 def main():
     Commands.create_tables()
