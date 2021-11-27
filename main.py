@@ -10,8 +10,20 @@ import time
 from time import sleep
 # from filters import CustomFilters
 from commands import Commands
+import sqlite3
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
+
+def test():
+    conn = sqlite3.connect('teleram_bot.db')
+    print "Opened database successfully";
+    conn.execute('''CREATE TABLE authorized_users
+         (user_id bigint PRIMARY KEY NOT NULL,
+         created_at datetime default now(),
+         updated_at datetime default now(),
+         lock_version int default 0;''')
+    print "Table created successfully";
+    conn.close()
 
 def is_allowed(update):
     allowed = False
@@ -200,6 +212,7 @@ def leave(update, context):
 def main():
     updater = Updater(os.environ["BOT_TOKEN"])
     dp = updater.dispatcher
+    dp.add_handler(CommandHandler('test',test))
     dp.add_handler(CommandHandler('start',start)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('eth',eth)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('bop',bop)) #,CustomFilters.authorized_user))
