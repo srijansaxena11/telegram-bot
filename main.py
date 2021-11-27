@@ -247,7 +247,7 @@ def ip(update, context):
     if(is_allowed(update)):
         ip = Commands.get_ip()
         context.bot.send_message(chat_id=update.message.chat_id, 
-                        reply_to_message_id=reply_to_message_id=update.message.message_id,
+                        reply_to_message_id=update.message.message_id,
                         text=f"Public IP address: {ip}")
         chat_id=update.message.chat_id
         context.bot.leave_chat(chat_id)
