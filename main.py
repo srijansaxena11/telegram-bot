@@ -17,11 +17,11 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 def test(update, context):
     conn = sqlite3.connect('teleram_bot.db')
     print ("Opened database successfully")
-    conn.execute('''CREATE TABLE authorized_users
+    conn.execute("CREATE TABLE authorized_users
          (user_id bigint PRIMARY KEY NOT NULL,
          created_at datetime default now(),
          updated_at datetime default now(),
-         lock_version int default 0;''')
+         lock_version int default 0;")
     print ("Table created successfully")
     conn.close()
 
