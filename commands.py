@@ -48,12 +48,12 @@ class Commands:
 
   def switch_off(item):
     headers = {'content-type': 'text/plain', 'accept': 'application/json'}
-    response = requests.post(f'https://home.myopenhab.org/rest/items/{item}', 'OFF', auth=requests.auth.HTTPBasicAuth('srijan.saxena0@gmail.com', 'srijan*1'), headers=headers)
+    response = requests.post(f'https://home.myopenhab.org/rest/items/{item}', 'OFF', auth=requests.auth.HTTPBasicAuth(os.environ["OPENHAB_USERNAME"], os.environ["OPENHAB_PASSWORD"]), headers=headers)
     return response.status_code
 
   def get_state(item):
     headers = {'content-type': 'text/plain', 'accept': 'application/json'}
-    response = requests.get(f'https://home.myopenhab.org/rest/items/{item}', auth=requests.auth.HTTPBasicAuth('srijan.saxena0@gmail.com', 'srijan*1'), headers=headers)
+    response = requests.get(f'https://home.myopenhab.org/rest/items/{item}', auth=requests.auth.HTTPBasicAuth(os.environ["OPENHAB_USERNAME"], os.environ["OPENHAB_PASSWORD"]), headers=headers)
     if response.status_code == 200:
       response_json = json.loads(response.text)
       state = response_json['state']
