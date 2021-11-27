@@ -63,7 +63,7 @@ def authorize(update, context):
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User already authorized.')
     else:  
         current_time = time.strftime('%Y-%m-%d %H:%M:%S')
-        conn.execute("INSERT INTO authorized_users(user_id,created_at,updated_at) VALUES(?,?,?)",int(user_id),current_time,current_time)
+        conn.execute("INSERT INTO authorized_users(user_id,created_at,updated_at) VALUES(?,?,?)",(int(user_id),current_time,current_time))
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User authorized.')
     conn.close()
 
@@ -79,7 +79,7 @@ def unauthorize(update, context):
             break
     if allowed:
         current_time = time.strftime('%Y-%m-%d %H:%M:%S')
-        conn.execute("UPDATE authorized_users set lock_version=-1, created_at= ?, updated_at=? where user_id=? and lock_version<>-1",int(user_id),current_time,current_time)
+        conn.execute("UPDATE authorized_users set lock_version=-1, created_at= ?, updated_at=? where user_id=? and lock_version<>-1",(int(user_id),current_time,current_time))
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User unauthorized.')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User not authorized.')
