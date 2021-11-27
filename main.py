@@ -88,13 +88,14 @@ def unauthorize(update, context):
 
 def listauthusers(update, context):
     if(is_allowed(update)):
-        authorized_username_array = []
+        authorized_usernames_array = []
         conn = sqlite3.connect('telegram_bot.db')
         authorized_users = conn.execute("SELECT user_id,username FROM authorized_users WHERE lock_version<>-1")
         for authorized_user in authorized_users:
-            authorized_username_array.append(authorized_user[1])
+            authorized_usernames_array.append(authorized_user[1])
         conn.close()
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'List of authorized users:\n{'\n'.join(authorized_username_array)}')
+        authorized_usernames_string='\n'.join(authorized_usernames_array)
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'List of authorized users:\n{authorized_usernames_string}')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
