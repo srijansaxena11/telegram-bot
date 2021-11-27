@@ -30,7 +30,7 @@ def create_tables():
 def is_owner(update):
     allowed = False
     user = update.message.from_user
-    if user.id = int(os.environ["OWNER_ID"]):
+    if user.id == int(os.environ["OWNER_ID"]):
         allowed = True
     return allowed
 
@@ -43,7 +43,7 @@ def is_allowed(update):
         conn = sqlite3.connect('teleram_bot.db')
         authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
         for authorized_user in authorized_users:
-            if user.id = int(authorized_user):
+            if user.id == int(authorized_user):
                 allowed = True
                 break  
         conn.close()
@@ -56,7 +56,7 @@ def authorize(update, context):
     conn = sqlite3.connect('teleram_bot.db')
     authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
     for authorized_user in authorized_users:
-        if user.id = int(authorized_user):
+        if user.id == int(authorized_user):
             allowed = True
             break
     if allowed:
@@ -73,7 +73,7 @@ def unauthorize(update, context):
     conn = sqlite3.connect('teleram_bot.db')
     authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
     for authorized_user in authorized_users:
-        if user.id = int(authorized_user):
+        if user.id == int(authorized_user):
             allowed = True
             break
     if allowed:
@@ -82,17 +82,6 @@ def unauthorize(update, context):
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User not authorized.')
     conn.close()
-
-# def get_eth_rate_inr():
-#     print("Inside get_eth_rate_inr()")
-#     eth_api = requests.get('https://rest.coinapi.io/v1/exchangerate/ETH/INR?apikey=95CBCBB3-72EB-48D3-B60D-9DDCB21F70AF').json()
-#     rate = eth_api['rate']
-#     return rate
-
-# def get_url():
-#     contents = requests.get('https://random.dog/woof.json').json()
-#     url = contents['url']
-#     return url
 
 def stark(update, context):
     if(is_allowed(update)):
@@ -216,12 +205,6 @@ def countdown(update, context):
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Countdown finished')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
-
-# def get_current_temperature():
-#     temp_api = requests.get('https://api.openweathermap.org/data/2.5/weather?id=1264733&appid=a72702debe3ebc2f16c3357591cb131e&units=metric').json()
-#     current_temperature = temp_api['main']['temp']
-#     feels_like_temperature = temp_api['main']['feels_like']
-#     return [current_temperature,feels_like_temperature]
 
 def temperature(update, context):
     if(is_allowed(update)):
