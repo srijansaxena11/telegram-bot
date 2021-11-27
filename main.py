@@ -304,7 +304,7 @@ def on(update, context):
                 message_to_be_sent = f'There was an error switching on {item}. Please check the item name again.'
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=message_to_be_sent)
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')
 
 def off(update, context):
     if(is_owner(update)):
@@ -323,7 +323,26 @@ def off(update, context):
                 message_to_be_sent = f'There was an error switching off {item}. Please check the item name again.'
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=message_to_be_sent)
     else:
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')
+
+def state(update, context):
+    if(is_owner(update)):
+        message_args = update.message.text.split(' ')
+        try:
+            item = message_args[1]
+        except IndexError:
+            item = ''
+        if item == '':
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Provide the item name to check state.')
+        else:
+            state = Commands.get_state(item)
+            if state == '':
+                message_to_be_sent = f'There was an error in retrieving the state of {item}. Please check the item name again.'
+            else:
+                message_to_be_sent = f'{item} is currently {state}.'
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=message_to_be_sent)
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')
 
 def main():
     Commands.create_tables()
@@ -347,6 +366,7 @@ def main():
     dp.add_handler(CommandHandler('getfile',getfile))
     dp.add_handler(CommandHandler('on',on))
     dp.add_handler(CommandHandler('off',off))
+    dp.add_handler(CommandHandler('state',state))
 #     dp.add_handler(MessageHandler(Filters.text, message_received)) #,CustomFilters.authorized_user))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
 #     dp.add_handler(InlineQueryHandler(inlinequery))

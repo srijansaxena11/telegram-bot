@@ -4,6 +4,7 @@ import sqlite3
 from requests import get
 import pytz
 from datetime import datetime
+import json
 
 class Commands:
   def get_eth_rate_inr():
@@ -49,3 +50,13 @@ class Commands:
     headers = {'content-type': 'text/plain', 'accept': 'application/json'}
     response = requests.post(f'https://home.myopenhab.org/rest/items/{item}', 'OFF', auth=requests.auth.HTTPBasicAuth('srijan.saxena0@gmail.com', 'srijan*1'), headers=headers)
     return response.status_code
+
+  def get_state(item):
+    headers = {'content-type': 'text/plain', 'accept': 'application/json'}
+    response = requests.get(f'https://home.myopenhab.org/rest/items/{item}', auth=requests.auth.HTTPBasicAuth('srijan.saxena0@gmail.com', 'srijan*1'), headers=headers)
+    if response.status_code == 200:
+      response_json = json.loads(response)
+      state = response_json['state']
+    else:
+      state = ''
+    return state
