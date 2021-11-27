@@ -249,11 +249,24 @@ def ip(update, context):
         context.bot.send_message(chat_id=update.message.chat_id, 
                         reply_to_message_id=update.message.message_id,
                         text=f"Public IP address: {ip}")
-        chat_id=update.message.chat_id
-        context.bot.leave_chat(chat_id)
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
-        
+
+def getfile(update, context):
+    if(is_allowed(update)):
+        message_args = update.message.text.split(' ')
+        try:
+            file_name = message_args[1]
+        except IndexError:
+            file_name = ''
+        if file_name == '':
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Provide the file name to download.')
+        else:
+            file = open(file_name, 'rb')
+            context.bot.sendDocument(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, document=file)
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
+
 def main():
     updater = Updater(os.environ["BOT_TOKEN"])
     dp = updater.dispatcher
@@ -268,6 +281,7 @@ def main():
     dp.add_handler(CommandHandler('info',info))
     dp.add_handler(CommandHandler('leave',leave))
     dp.add_handler(CommandHandler('ip',ip))
+    dp.add_handler(CommandHandler('getfile',getfile))
 #     dp.add_handler(MessageHandler(Filters.text, message_received)) #,CustomFilters.authorized_user))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
 #     dp.add_handler(InlineQueryHandler(inlinequery))
