@@ -40,7 +40,7 @@ def is_allowed(update):
         allowed = True
     else:
         user = update.message.from_user
-        conn = sqlite3.connect('teleram_bot.db')
+        conn = sqlite3.connect('telegram_bot.db')
         authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
         for authorized_user in authorized_users:
             if user.id == int(authorized_user):
@@ -53,7 +53,7 @@ def authorize(update, context):
     allowed = False
     user = update.message.reply_to_message.from_user
     user_id = user.id
-    conn = sqlite3.connect('teleram_bot.db')
+    conn = sqlite3.connect('telegram_bot.db')
     authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
     for authorized_user in authorized_users:
         if user.id == int(authorized_user):
@@ -70,7 +70,7 @@ def unauthorize(update, context):
     allowed = False
     user = update.message.reply_to_message.from_user
     user_id = user.id
-    conn = sqlite3.connect('teleram_bot.db')
+    conn = sqlite3.connect('telegram_bot.db')
     authorized_users = conn.execute("SELECT user_id FROM authorized_users WHERE lock_version<>-1")
     for authorized_user in authorized_users:
         if user.id == int(authorized_user):
