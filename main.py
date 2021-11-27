@@ -11,6 +11,7 @@ from commands import Commands
 import sqlite3
 import pytz
 from datetime import datetime
+import psutil
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 
@@ -344,6 +345,14 @@ def state(update, context):
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')
 
+def hwinfo(update, context):
+    if(is_allowed(update)):
+        cpu_usage = psutil.cpu_percent()
+        ram_usage = psutil.virtual_memory().percent
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'CPU Usage: {cpu_usage}%\nRAM Usage: {ram_usage}%')
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
+
 def main():
     Commands.create_tables()
     Commands.authorize_owner()
@@ -367,6 +376,7 @@ def main():
     dp.add_handler(CommandHandler('on',on))
     dp.add_handler(CommandHandler('off',off))
     dp.add_handler(CommandHandler('state',state))
+    dp.add_handler(CommandHandler('hwinfo',hwinfo))
 #     dp.add_handler(MessageHandler(Filters.text, message_received)) #,CustomFilters.authorized_user))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
 #     dp.add_handler(InlineQueryHandler(inlinequery))
