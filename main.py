@@ -81,6 +81,7 @@ def unauthorize(update, context):
         tz = pytz.timezone('Asia/Kolkata')
         current_time = datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S')
         conn.execute("UPDATE authorized_users set lock_version=-1, created_at= ?, updated_at=? where user_id=? and lock_version<>-1",(int(user_id),current_time,current_time))
+        conn.commit()
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User unauthorized.')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='User not authorized.')
@@ -289,8 +290,8 @@ def main():
     updater = Updater(os.environ["BOT_TOKEN"])
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('setup',setup))
-    dp.add_handler(CommandHandler('authorize',authorize))
-    dp.add_handler(CommandHandler('unauthorize',unauthorize))
+    dp.add_handler(CommandHandler('auth',authorize))
+    dp.add_handler(CommandHandler('unauth',unauthorize))
     dp.add_handler(CommandHandler('listauthusers',listauthusers))
     dp.add_handler(CommandHandler('start',start)) #,CustomFilters.authorized_user))
     dp.add_handler(CommandHandler('eth',eth)) #,CustomFilters.authorized_user))
