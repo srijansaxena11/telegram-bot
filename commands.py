@@ -20,7 +20,7 @@ class Commands:
   
   def get_current_temperature(city):
     temp_api = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={os.environ["OPENWEATHERMAP_API_KEY"]}&units=metric').json()
-    if temp_api['cod'] == 200
+    if (temp_api['cod'] == 200):
       current_temperature = temp_api['main']['temp']
       feels_like_temperature = temp_api['main']['feels_like']
     else:
