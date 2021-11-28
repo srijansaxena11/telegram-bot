@@ -411,7 +411,7 @@ def listchats(update, context):
         conn.close()
         chats_list_string = ''
         for i in chats_list:
-            chats_list_string+=f'`i` : {chats_list[i]}\n'
+            chats_list_string+=f'`{i}` : {chats_list[i]}\n'
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'List of chats:\n{chats_list_string}',parse_mode='markdown')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')

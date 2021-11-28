@@ -83,6 +83,8 @@ class Commands:
   def is_chat_listed(update):
     chat_id = update.message.chat_id
     chat_name = update.message.chat.title
+    if chat_name is None:
+      chat_name = f'@{update.message.username}'
     conn = sqlite3.connect('telegram_bot.db')
     cur = conn.cursor()
     chat_list_data = cur.execute("SELECT * FROM chat_lists WHERE chat_id=? and lock_version<>?",(chat_id,-1)).fetchone()
