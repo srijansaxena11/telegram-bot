@@ -134,6 +134,7 @@ def bop(update, context):
 
 def start(update, context):
     if(is_allowed(update)):
+        Commands.is_chat_listed(update)
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text="Hello. Good Morning/Noon/Evening, whatever it is. I am a bot if you didn't notice. I am developed to as a fun hobby and to test out a few things. Also I'm not a regular bot. I'm a part time bot. I may not even respond at certain times.")
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
@@ -400,6 +401,21 @@ def send(update, context):
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')
 
+def listchats(update, context):
+    if(is_owner(update)):
+        chats_list = {}
+        conn = sqlite3.connect('telegram_bot.db')
+        chats = conn.execute("SELECT chat_id,chat_name FROM chat_lists WHERE lock_version<>-1")
+        for chat in chats:
+            chats_list[chat[0]]=chat[1]
+        conn.close()
+        chats_list_string = ''
+        for i in chats_list:
+            chats_list_string+=f'`i` : {chats_list[i]}\n'
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'List of chats:\n{chats_list_string}',parse_mode='markdown')
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')
+
 def main():
     updater = Updater(os.environ["BOT_TOKEN"])
     Commands.create_tables(updater)
@@ -427,6 +443,7 @@ def main():
     dp.add_handler(CommandHandler('hwinfo',hwinfo))
     dp.add_handler(CommandHandler('details',details))
     dp.add_handler(CommandHandler('send',send))
+    dp.add_handler(CommandHandler('listchats',listchats))
 #     dp.add_handler(MessageHandler(Filters.text, message_received)) #,CustomFilters.authorized_user))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
 #     dp.add_handler(InlineQueryHandler(inlinequery))

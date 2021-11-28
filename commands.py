@@ -35,6 +35,7 @@ class Commands:
   def create_tables(updater):
     conn = sqlite3.connect('telegram_bot.db')
     conn.execute("CREATE TABLE IF NOT EXISTS authorized_users (user_id bigint PRIMARY KEY NOT NULL, username varchar(100), created_at datetime, updated_at datetime, lock_version int default 0)")
+    conn.execute("CREATE TABLE IF NOT EXISTS chat_lists (chat_id bigint PRIMARY KEY NOT NULL, chat_name varchar(100), created_at datetime, updated_at datetime, lock_version int default 0)")
     conn.close()
 
   def authorize_owner(updater):
@@ -78,3 +79,14 @@ class Commands:
     else:
       state = ''
     return state
+
+  def is_chat_listed(update):
+    chat_id = update.message.chat_id
+    chat_name = update.message.chat.title
+    conn = sqlite3.connect('telegram_bot.db')
+    chat_list_data = conn.execute("SELECT * FROM chat_lists WHERE chat_id=? and lock_version<>-1",(chat_id))
+    if chat_list_data == 0:
+      print(f'Chat data with ID {chat_id} not present in database. Adding...')
+      conn.execute("INSERT INTO chat_lists(chat_id,chat_name,created_at,updated_at) VALUES(?,?,?,?)",(chat_id,chat_name,current_time,current_time))
+      conn.commit()
+    conn.close()
