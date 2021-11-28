@@ -33,12 +33,12 @@ class Commands:
     ip = get('https://api.ipify.org').content.decode('utf8')
     return ip
 
-  def create_tables(bot):
+  def create_tables(updater):
     conn = sqlite3.connect('telegram_bot.db')
     conn.execute("CREATE TABLE IF NOT EXISTS authorized_users (user_id bigint PRIMARY KEY NOT NULL, username varchar(100), created_at datetime, updated_at datetime, lock_version int default 0)")
     conn.close()
 
-  def authorize_owner(bot):
+  def authorize_owner(updater):
     conn = sqlite3.connect('telegram_bot.db')
     tz = pytz.timezone('Asia/Kolkata')
     current_time = datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S')
@@ -46,7 +46,7 @@ class Commands:
     conn.commit()
     conn.close()
 
-  def authorize_users(bot):
+  def authorize_users(updater):
     conn = sqlite3.connect('telegram_bot.db')
     tz = pytz.timezone('Asia/Kolkata')
     current_time = datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S')
@@ -55,7 +55,7 @@ class Commands:
     for pre_authorized_user_id in pre_authorized_user_ids:
       print(f'pre_authorized_user_id: {pre_authorized_user_id}')
       pre_authorized_user_id = int(pre_authorized_user_id)
-      pre_authorized_user_details = bot.get_chat(chat_id=pre_authorized_user_id)
+      pre_authorized_user_details = updater.bot.get_chat(chat_id=pre_authorized_user_id)
       pre_authorized_username = pre_authorized_user_details.username
       conn.execute("INSERT INTO authorized_users(user_id,username,created_at,updated_at) VALUES(?,?,?,?)",(pre_authorized_user_id,pre_authorized_username,current_time,current_time))
       conn.commit()
