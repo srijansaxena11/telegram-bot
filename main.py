@@ -384,6 +384,22 @@ def details(update, context):
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
+def send(update, context):
+    if(is_owner(update)):
+        message_args = update.message.text.replace('/send ', '').split('#')
+        try:
+            chat_id = int(message_args[0])
+            message_to_be_sent = message_args[1]
+        except IndexError:
+            chat_id = 0
+            message_to_be_sent = ''
+        if chat_id == 0 or message_to_be_sent == '':
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Wrong arguments passed. Command syntax:\n/send <Chat ID>#<Meesage to be sent>')
+        else:
+            context.bot.send_message(chat_id=chat_id, text=message_to_be_sent)
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')
+
 def main():
     updater = Updater(os.environ["BOT_TOKEN"])
     Commands.create_tables(updater)
@@ -410,6 +426,7 @@ def main():
     dp.add_handler(CommandHandler('state',state))
     dp.add_handler(CommandHandler('hwinfo',hwinfo))
     dp.add_handler(CommandHandler('details',details))
+    dp.add_handler(CommandHandler('send',send))
 #     dp.add_handler(MessageHandler(Filters.text, message_received)) #,CustomFilters.authorized_user))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
 #     dp.add_handler(InlineQueryHandler(inlinequery))

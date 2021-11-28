@@ -9,7 +9,6 @@ import json
 
 class Commands:
   def get_eth_rate_inr():
-    print("Inside Commands.get_eth_rate_inr()")
     eth_api = requests.get(f'https://rest.coinapi.io/v1/exchangerate/ETH/INR?apikey={os.environ["COINAPI_KEY"]}').json()
     rate = eth_api['rate']
     return rate
@@ -53,7 +52,6 @@ class Commands:
     # print(f'PRE_AUTHORIZED_USER_IDS: {os.environ["PRE_AUTHORIZED_USER_IDS"]}')
     pre_authorized_user_ids = os.environ["PRE_AUTHORIZED_USER_IDS"].split(',')
     for pre_authorized_user_id in pre_authorized_user_ids:
-      print(f'pre_authorized_user_id: {pre_authorized_user_id}')
       pre_authorized_user_id = int(pre_authorized_user_id)
       pre_authorized_user_details = updater.bot.get_chat(chat_id=pre_authorized_user_id)
       pre_authorized_username = pre_authorized_user_details.username
