@@ -55,7 +55,7 @@ class Commands:
     for pre_authorized_user_id in pre_authorized_user_ids:
       print(f'pre_authorized_user_id: {pre_authorized_user_id}')
       pre_authorized_user_id = int(pre_authorized_user_id)
-      pre_authorized_user_details = Bot.get_chat(pre_authorized_user_id)
+      pre_authorized_user_details = Bot.get_chat(chat_id=pre_authorized_user_id)
       pre_authorized_username = pre_authorized_user_details.username
       conn.execute("INSERT INTO authorized_users(user_id,username,created_at,updated_at) VALUES(?,?,?,?)",(pre_authorized_user_id,pre_authorized_username,current_time,current_time))
       conn.commit()
