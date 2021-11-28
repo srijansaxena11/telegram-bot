@@ -409,6 +409,7 @@ def main():
     dp.add_handler(CommandHandler('off',off))
     dp.add_handler(CommandHandler('state',state))
     dp.add_handler(CommandHandler('hwinfo',hwinfo))
+    dp.add_handler(CommandHandler('details',details))
 #     dp.add_handler(MessageHandler(Filters.text, message_received)) #,CustomFilters.authorized_user))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
 #     dp.add_handler(InlineQueryHandler(inlinequery))
