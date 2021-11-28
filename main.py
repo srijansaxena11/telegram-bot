@@ -243,7 +243,7 @@ def temperature(update, context):
             if (current_temperature==False or feels_like_temperature==False):
                 context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'There was an error in retrieving the details for {city}. Please check the city name again.')
             else:
-            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Current temperature in {city} is {current_temperature}°C. It feels like {feels_like_temperature}°C')
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Current temperature in {city} is {current_temperature}°C. It feels like {feels_like_temperature}°C')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
         
