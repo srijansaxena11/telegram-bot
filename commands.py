@@ -50,9 +50,10 @@ class Commands:
     conn = sqlite3.connect('telegram_bot.db')
     tz = pytz.timezone('Asia/Kolkata')
     current_time = datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S')
-    print(f'PRE_AUTHORIZED_USER_IDS: {os.environ["PRE_AUTHORIZED_USER_IDS"]}')
+    # print(f'PRE_AUTHORIZED_USER_IDS: {os.environ["PRE_AUTHORIZED_USER_IDS"]}')
     pre_authorized_user_ids = os.environ["PRE_AUTHORIZED_USER_IDS"].split(',')
     for pre_authorized_user_id in pre_authorized_user_ids:
+      print(f'pre_authorized_user_id: {pre_authorized_user_id}')
       pre_authorized_user_id = int(pre_authorized_user_id)
       pre_authorized_username = Bot.get_chat(pre_authorized_user_id).username
       conn.execute("INSERT INTO authorized_users(user_id,username,created_at,updated_at) VALUES(?,?,?,?)",(pre_authorized_user_id,pre_authorized_username,current_time,current_time))
