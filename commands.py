@@ -18,10 +18,14 @@ class Commands:
     url = contents['url']
     return url
   
-  def get_current_temperature():
-    temp_api = requests.get(f'https://api.openweathermap.org/data/2.5/weather?id=1264733&appid={os.environ["OPENWEATHERMAP_API_KEY"]}&units=metric').json()
-    current_temperature = temp_api['main']['temp']
-    feels_like_temperature = temp_api['main']['feels_like']
+  def get_current_temperature(city):
+    temp_api = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={os.environ["OPENWEATHERMAP_API_KEY"]}&units=metric').json()
+    if temp_api['cod'] == 200
+      current_temperature = temp_api['main']['temp']
+      feels_like_temperature = temp_api['main']['feels_like']
+    else:
+      current_temperature = False
+      feels_like_temperature = False
     return [current_temperature,feels_like_temperature]
 
   def get_ip():
