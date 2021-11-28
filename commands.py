@@ -5,7 +5,7 @@ from requests import get
 import pytz
 from datetime import datetime
 import json
-from telegram import bot
+from telegram import Bot
 
 class Commands:
   def get_eth_rate_inr():
@@ -53,7 +53,7 @@ class Commands:
     pre_authorized_user_ids = os.environ["PRE_AUTHORIZED_USER_IDS"].split(',')
     for pre_authorized_user_id in pre_authorized_user_ids:
       pre_authorized_user_id = int(pre_authorized_user_id)
-      pre_authorized_username = bot.get_chat(pre_authorized_user_id).username
+      pre_authorized_username = Bot.get_chat(pre_authorized_user_id).username
       conn.execute("INSERT INTO authorized_users(user_id,username,created_at,updated_at) VALUES(?,?,?,?)",(pre_authorized_user_id,pre_authorized_username,current_time,current_time))
       conn.commit()
     conn.close()
