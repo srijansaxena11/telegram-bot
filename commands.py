@@ -85,7 +85,7 @@ class Commands:
     chat_name = update.message.chat.title
     conn = sqlite3.connect('telegram_bot.db')
     chat_list_data = conn.execute("SELECT * FROM chat_lists WHERE chat_id=? and lock_version<>?",(chat_id,-1)).fetchone
-    if chat_list_data == None:
+    if chat_list_data is None:
       print(f'Chat data with ID {chat_id} not present in database. Adding...')
       conn.execute("INSERT INTO chat_lists(chat_id,chat_name,created_at,updated_at) VALUES(?,?,?,?)",(chat_id,chat_name,current_time,current_time))
       conn.commit()
