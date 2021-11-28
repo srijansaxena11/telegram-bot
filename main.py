@@ -364,7 +364,7 @@ def hwinfo(update, context):
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
-get details(update, context):
+def details(update, context):
     if(is_allowed(update)):
         message_args = update.message.text.split(' ')
         try:
