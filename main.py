@@ -385,10 +385,10 @@ def details(update, context):
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
 def main():
-    Commands.create_tables()
-    Commands.authorize_owner()
-    Commands.authorize_users()
     updater = Updater(os.environ["BOT_TOKEN"])
+    Commands.create_tables(updater)
+    Commands.authorize_owner(updater)
+    Commands.authorize_users(updater)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('setup',setup))
     dp.add_handler(CommandHandler('auth',authorize))
