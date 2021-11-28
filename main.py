@@ -375,12 +375,11 @@ def details(update, context):
             context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Provide the user id to get the details.')
         else:
             user_details = context.bot.get_chat(user_id)
-            is_user_bot = user_details.is_bot
             user_first_name = user_details.first_name
             user_last_name = user_details.last_name if user_details.last_name is not None else ''
             user_username  = user_details.username if user_details.username is not None else ''
             context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, 
-                                     text=f'<b>User ID</b>: {user_id}\n<b>Is User Bot</b>: {is_user_bot}\n<b>User First Name</b>: {user_first_name}\n<b>User Last Name</b>: {user_last_name}\n<b>User username</b>: @{user_username}', 
+                                     text=f'<b>User ID</b>: {user_id}\n<b>User First Name</b>: {user_first_name}\n<b>User Last Name</b>: {user_last_name}\n<b>User username</b>: @{user_username}', 
                                      parse_mode='HTML')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
