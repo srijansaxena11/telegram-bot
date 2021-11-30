@@ -32,7 +32,7 @@ class Commands:
     ip = get('https://api.ipify.org').content.decode('utf8')
     return ip
 
-  def create_tables(updater):
+  def create_tables():
     conn = sqlite3.connect('telegram_bot.db')
     conn.execute("CREATE TABLE IF NOT EXISTS authorized_users (user_id bigint PRIMARY KEY NOT NULL, username varchar(100), created_at datetime, updated_at datetime, lock_version int default 0)")
     conn.execute("CREATE TABLE IF NOT EXISTS chat_lists (chat_id bigint PRIMARY KEY NOT NULL, chat_name varchar(100), created_at datetime, updated_at datetime, lock_version int default 0)")

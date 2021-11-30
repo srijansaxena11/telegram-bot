@@ -418,7 +418,7 @@ def listchats(update, context):
 
 def main():
     updater = Updater(os.environ["BOT_TOKEN"])
-    Commands.create_tables(updater)
+    Commands.create_tables()
     Commands.authorize_owner(updater)
     Commands.authorize_users(updater)
     dp = updater.dispatcher
