@@ -444,7 +444,7 @@ def ethstats(update, context):
                     current_hash_rate = float(eth_worker_stat['currentHashrate'])/1000000
                     reported_hash_rate = float(eth_worker_stat['reportedHashrate'])/1000000
                     eth_worker_stats_msg += f'Worker Name: {worker_name}\nCurrent Hashrate: {current_hash_rate} MH/s\nReported Hashrate: {reported_hash_rate} MH/s\n'
-                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Ethereum Miner stats from ethminer.org:\nMiner ID:`{miner_id}`\n\neth_miner_stats_msg\n\neth_worker_stats_msg',parse_mode='markdown')
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Ethereum Miner stats from ethminer.org:\nMiner ID: `{miner_id}`\n\n{eth_miner_stats_msg}\n\n{eth_worker_stats_msg}',parse_mode='markdown')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
     
