@@ -12,6 +12,7 @@ import sqlite3
 import pytz
 from datetime import datetime
 import psutil
+import json
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
 
@@ -423,14 +424,20 @@ def ethstats(update, context):
             miner_id = message_args[1]
         except IndexError:
             miner_id = ''
-        eth_miner_stats, eth_worker_stats = Commands.get_eth_miner_stats(miner_id)
-        eth_miner_stats = eth_miner_stats.json()
-        eth_worker_stats = eth_worker_stats.json()
-        eth_miner_stats_msg = f'Current Hashrate: {float(eth_miner_stats['currentHashrate'])/1000000} MH/s\nReported Hashrate: {float(eth_miner_stats['reportedHashrate'])/1000000} MH/s\nActive Workers: {eth_miner_stats['activeWorkers']}\nUnpaid Balance: {float(eth_miner_stats['unpaid'])/100000000000000000} ETH'
-        eth_worker_stats_msg = ''
-        for eth_worker_stat in eth_worker_stats:
-            eth_worker_stats_msg += f'Worker Name: {eth_worker_stat['worker']}\nCurrent Hashrate: {float(eth_worker_stat['currentHashrate'])/1000000} MH/s\nReported Hashrate: {float(eth_worker_stat['reportedHashrate'])/1000000} MH/s\n'
-        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Ethereum Miner stats from ethminer.org:\nMiner ID:{miner_id}\n\neth_miner_stats_msg\n\neth_worker_stats_msg')
+        if miner_id == '':
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Provide the miner ID to get the details from ethminer.org')
+        else:    
+            eth_miner_stats, eth_worker_stats = Commands.get_eth_miner_stats(miner_id)
+            if eth_miner_stats == '' or eth_worker_stats == '':
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'There was an error in retrieving the details of miner with ID: {miner_id}. Please check the miner ID again.')
+            else:
+                # eth_miner_stats = eth_miner_stats.json()
+                # eth_worker_stats = eth_worker_stats.json()
+                eth_miner_stats_msg = f'Current Hashrate: {float(eth_miner_stats['currentHashrate'])/1000000} MH/s\nReported Hashrate: {float(eth_miner_stats['reportedHashrate'])/1000000} MH/s\nActive Workers: {eth_miner_stats['activeWorkers']}\nUnpaid Balance: {float(eth_miner_stats['unpaid'])/100000000000000000} ETH'
+                eth_worker_stats_msg = ''
+                for eth_worker_stat in eth_worker_stats:
+                    eth_worker_stats_msg += f'Worker Name: {eth_worker_stat['worker']}\nCurrent Hashrate: {float(eth_worker_stat['currentHashrate'])/1000000} MH/s\nReported Hashrate: {float(eth_worker_stat['reportedHashrate'])/1000000} MH/s\n'
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Ethereum Miner stats from ethminer.org:\nMiner ID:{miner_id}\n\neth_miner_stats_msg\n\neth_worker_stats_msg')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
     
