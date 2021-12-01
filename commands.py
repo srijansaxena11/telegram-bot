@@ -53,11 +53,14 @@ class Commands:
     # print(f'PRE_AUTHORIZED_USER_IDS: {os.environ["PRE_AUTHORIZED_USER_IDS"]}')
     pre_authorized_user_ids = os.environ["PRE_AUTHORIZED_USER_IDS"].split(',')
     for pre_authorized_user_id in pre_authorized_user_ids:
-      pre_authorized_user_id = int(pre_authorized_user_id)
-      pre_authorized_user_details = updater.bot.get_chat(chat_id=pre_authorized_user_id)
-      pre_authorized_username = pre_authorized_user_details.username
-      conn.execute("INSERT INTO authorized_users(user_id,username,created_at,updated_at) VALUES(?,?,?,?)",(pre_authorized_user_id,pre_authorized_username,current_time,current_time))
-      conn.commit()
+      try:
+        pre_authorized_user_id = int(pre_authorized_user_id)
+        pre_authorized_user_details = updater.bot.get_chat(chat_id=pre_authorized_user_id)
+        pre_authorized_username = pre_authorized_user_details.username
+        conn.execute("INSERT INTO authorized_users(user_id,username,created_at,updated_at) VALUES(?,?,?,?)",(pre_authorized_user_id,pre_authorized_username,current_time,current_time))
+        conn.commit()
+      except:
+        print(f'Error authorizing user id: {pre_authorized_user_id}')
     conn.close()
 
   def switch_on(item):
