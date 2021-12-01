@@ -433,10 +433,17 @@ def ethstats(update, context):
             else:
                 eth_miner_stats = eth_miner_stats.json()
                 eth_worker_stats = eth_worker_stats.json()
-                eth_miner_stats_msg = f'Current Hashrate: {float(eth_miner_stats['currentHashrate'])/1000000} MH/s\nReported Hashrate: {float(eth_miner_stats['reportedHashrate'])/1000000} MH/s\nActive Workers: {eth_miner_stats['activeWorkers']}\nUnpaid Balance: {float(eth_miner_stats['unpaid'])/100000000000000000} ETH'
+                current_hash_rate = float(eth_miner_stats['currentHashrate'])/1000000
+                reported_hash_rate = float(eth_miner_stats['reportedHashrate'])/1000000
+                active_workers = eth_miner_stats['activeWorkers']
+                unpaid_balance = float(eth_miner_stats['unpaid'])/100000000000000000
+                eth_miner_stats_msg = f'Current Hashrate: {current_hash_rate} MH/s\nReported Hashrate: {reported_hash_rate} MH/s\nActive Workers: {active_workers}\nUnpaid Balance: {unpaid_balance} ETH'
                 eth_worker_stats_msg = ''
                 for eth_worker_stat in eth_worker_stats:
-                    eth_worker_stats_msg += f'Worker Name: {eth_worker_stat['worker']}\nCurrent Hashrate: {float(eth_worker_stat['currentHashrate'])/1000000} MH/s\nReported Hashrate: {float(eth_worker_stat['reportedHashrate'])/1000000} MH/s\n'
+                    worker_name = eth_worker_stat['worker']
+                    current_hash_rate = float(eth_worker_stat['currentHashrate'])/1000000
+                    reported_hash_rate = float(eth_worker_stat['reportedHashrate'])/1000000
+                    eth_worker_stats_msg += f'Worker Name: {worker_name}\nCurrent Hashrate: {current_hash_rate} MH/s\nReported Hashrate: {reported_hash_rate} MH/s\n'
                 context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Ethereum Miner stats from ethminer.org:\nMiner ID:`{miner_id}`\n\neth_miner_stats_msg\n\neth_worker_stats_msg',parse_mode='markdown')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
