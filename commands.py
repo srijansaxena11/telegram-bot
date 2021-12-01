@@ -98,3 +98,13 @@ class Commands:
     else:
       print(f'Chat with ID {chat_id} already present in database.')
     conn.close()
+
+  def get_eth_miner_stats(miner_id):
+    eth_miner_stats_json = requests.get(f'https://api.ethermine.org/miner/:{miner_id}/dashboard').json()
+    if eth_miner_stats_json['status'] == 'OK':
+      eth_miner_stats = eth_miner_stats_json['data']['currentStatistics']
+      eth_worker_stats = eth_miner_stats_json['data']['workers']
+    else:
+      eth_miner_stats = ''
+      eth_worker_stats = ''
+    return [eth_miner_stats, eth_worker_stats]

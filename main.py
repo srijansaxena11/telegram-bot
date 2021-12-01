@@ -238,7 +238,7 @@ def temperature(update, context):
         except IndexError:
             city = ''
         if city == '':
-            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Provide a ciy name to get temperature details.')
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Provide a city name to get temperature details.')
         else:
             current_temperature,feels_like_temperature = Commands.get_current_temperature(city)
             if (current_temperature==False or feels_like_temperature==False):
@@ -416,6 +416,23 @@ def listchats(update, context):
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not the owner.')
 
+def ethstats(update, context):
+    if(is_allowed):
+        message_args = update.message.text.split(' ')
+        try:
+            miner_id = message_args[1]
+        except IndexError:
+            miner_id = ''
+        eth_miner_stats, eth_worker_stats = Commands.get_eth_miner_stats(miner_id)
+        eth_miner_stats_msg = f'Current Hashrate: {float(eth_miner_stats['currentHashrate'])/1000000} MH/s\nReported Hashrate: {float(eth_miner_stats['reportedHashrate'])/1000000} MH/s\nActive Workers: {eth_miner_stats['activeWorkers']}\nUnpaid Balance: {float(eth_miner_stats['unpaid'])/100000000000000000} ETH'
+        eth_worker_stats_msg = ''
+        for eth_worker_stat in eth_worker_stats:
+            eth_worker_stats_msg += f'Worker Name: {eth_worker_stat['worker']}\nCurrent Hashrate: {float(eth_worker_stat['currentHashrate'])/1000000} MH/s\nReported Hashrate: {float(eth_worker_stat['reportedHashrate'])/1000000} MH/s\n'
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Ethereum Miner stats from ethminer.org:\nMiner ID:{miner_id}\n\neth_miner_stats_msg\n\neth_worker_stats_msg')
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
+    
+
 def main():
     updater = Updater(os.environ["BOT_TOKEN"])
     Commands.create_tables()
@@ -444,6 +461,7 @@ def main():
     dp.add_handler(CommandHandler('details',details))
     dp.add_handler(CommandHandler('send',send))
     dp.add_handler(CommandHandler('listchats',listchats))
+    dp.add_handler(CommandHandler('ethstats',ethstats))
 #     dp.add_handler(MessageHandler(Filters.text, message_received)) #,CustomFilters.authorized_user))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
 #     dp.add_handler(InlineQueryHandler(inlinequery))
