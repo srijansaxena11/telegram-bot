@@ -282,7 +282,7 @@ def ip(update, context):
         ip = Commands.get_ip()
         context.bot.send_message(chat_id=update.message.chat_id, 
                         reply_to_message_id=update.message.message_id,
-                        text=f"Public IP address: {ip}")
+                        text=f"Public IP address: `{ip}`",parse_mode='markdown')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
 
