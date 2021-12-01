@@ -425,11 +425,11 @@ def ethstats(update, context):
         except IndexError:
             miner_id = ''
         if miner_id == '':
-            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Provide the miner ID to get the details from ethermine.org')
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Provide the ethereum wallet ID to get the details from ethermine.org')
         else:    
             eth_miner_stats, eth_worker_stats = Commands.get_eth_miner_stats(miner_id)
             if eth_miner_stats == '' or eth_worker_stats == '':
-                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'There was an error in retrieving the details of miner with ID: {miner_id}. Please check the miner ID again.')
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'There was an error in retrieving the details of miner with ethereum wallet ID: {miner_id}. Please check the ethereum wallet ID again.')
             else:
                 # eth_miner_stats = eth_miner_stats.json()
                 # eth_worker_stats = eth_worker_stats.json()
@@ -444,7 +444,7 @@ def ethstats(update, context):
                     current_hash_rate = float(eth_worker_stat['currentHashrate'])/1000000
                     reported_hash_rate = float(eth_worker_stat['reportedHashrate'])/1000000
                     eth_worker_stats_msg += f'Worker Name: {worker_name}\nCurrent Hashrate: {current_hash_rate} MH/s\nReported Hashrate: {reported_hash_rate} MH/s\n\n'
-                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Ethereum Miner stats from ethermine.org:\nMiner ID: `{miner_id}`\n\n{eth_miner_stats_msg}\n\n{eth_worker_stats_msg}',parse_mode='markdown')
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Ethereum Miner stats from ethermine.org:\nEthereum wallet ID: `{miner_id}`\n\n{eth_miner_stats_msg}\n\n{eth_worker_stats_msg}',parse_mode='markdown')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
     
