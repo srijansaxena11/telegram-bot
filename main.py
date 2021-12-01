@@ -424,6 +424,8 @@ def ethstats(update, context):
         except IndexError:
             miner_id = ''
         eth_miner_stats, eth_worker_stats = Commands.get_eth_miner_stats(miner_id)
+        eth_miner_stats = eth_miner_stats.json()
+        eth_worker_stats = eth_worker_stats.json()
         eth_miner_stats_msg = f'Current Hashrate: {float(eth_miner_stats['currentHashrate'])/1000000} MH/s\nReported Hashrate: {float(eth_miner_stats['reportedHashrate'])/1000000} MH/s\nActive Workers: {eth_miner_stats['activeWorkers']}\nUnpaid Balance: {float(eth_miner_stats['unpaid'])/100000000000000000} ETH'
         eth_worker_stats_msg = ''
         for eth_worker_stat in eth_worker_stats:
