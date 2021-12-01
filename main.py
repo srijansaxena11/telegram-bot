@@ -431,8 +431,8 @@ def ethstats(update, context):
             if eth_miner_stats == '' or eth_worker_stats == '':
                 context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'There was an error in retrieving the details of miner with ID: {miner_id}. Please check the miner ID again.')
             else:
-                eth_miner_stats = eth_miner_stats.json()
-                eth_worker_stats = eth_worker_stats.json()
+                # eth_miner_stats = eth_miner_stats.json()
+                # eth_worker_stats = eth_worker_stats.json()
                 current_hash_rate = float(eth_miner_stats['currentHashrate'])/1000000
                 reported_hash_rate = float(eth_miner_stats['reportedHashrate'])/1000000
                 active_workers = eth_miner_stats['activeWorkers']
