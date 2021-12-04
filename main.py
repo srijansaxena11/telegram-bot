@@ -464,7 +464,7 @@ def do(update, context):
                 context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='⊙﹏⊙')
             elif action == 'annoyed':
                 context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='(¬_¬)')
-            elif action == 'annoyed':
+            elif action == 'cry':
                 context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='(ಥ﹏ಥ)')
             elif action == 'shrug':
                 context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='¯\\_(ツ)_/¯') 
