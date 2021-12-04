@@ -475,7 +475,8 @@ def do(update, context):
             elif action == 'wink':
                 context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='◕‿↼')
             elif action == 'f'
-            "....................../´¯/) \n....................,/¯../ \n.................../..../ \n............./´¯/'...'/´¯¯`·¸ \n........../'/.../..../......./¨¯\\ \n........('(...´...´.... ¯~/'...') \n.........\\.................'...../ \n..........''...\\.......... _.·´ \n............\\..............( \n..............\\.............\\..."
+                msg = "....................../´¯/) \n....................,/¯../ \n.................../..../ \n............./´¯/'...'/´¯¯`·¸ \n........../'/.../..../......./¨¯\\ \n........('(...´...´.... ¯~/'...') \n.........\\.................'...../ \n..........''...\\.......... _.·´ \n............\\..............( \n..............\\.............\\..."
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=msg)
             elif action == 'another action':
                 context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='another action')
             else:
