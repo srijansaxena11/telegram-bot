@@ -447,6 +447,39 @@ def ethstats(update, context):
                 context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Ethereum Miner stats from ethermine.org:\nEthereum wallet ID: `{miner_id}`\n\n{eth_miner_stats_msg}\n\n{eth_worker_stats_msg}',parse_mode='markdown')
     else:
         context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
+
+def do(update, context):
+    if(is_allowed(update)):
+        message_args = update.message.text.split(' ')
+        try:
+            action = message_args[1]
+        except IndexError:
+            action = ''
+        if action == '':
+            context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text=f'Provide the action name.')
+        else:
+            if action == 'lenny':
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='( ͡° ͜ʖ ͡°)')
+            elif action == 'sad':
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='⊙﹏⊙')
+            elif action == 'annoyed':
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='(¬_¬)')
+            elif action == 'annoyed':
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='(ಥ﹏ಥ)')
+            elif action == 'shrug':
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='¯\\_(ツ)_/¯') 
+            elif action == 'shoot':
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='̿ ̿ ̿'̿'\\̵͇̿̿\\з=(•_•)=ε/̵͇̿̿/'̿'̿ ̿')
+            elif action == 'happy':
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='(¬‿¬)')
+            elif action == 'wink':
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='◕‿↼')
+            elif action == 'wink':
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='◕‿↼')
+            else:
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Action not found')
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Who the f**k are you? You are not authorized.')
     
 
 def main():
@@ -478,6 +511,7 @@ def main():
     dp.add_handler(CommandHandler('send',send))
     dp.add_handler(CommandHandler('listchats',listchats))
     dp.add_handler(CommandHandler('ethstats',ethstats))
+    dp.add_handler(CommandHandler('do',do))
 #     dp.add_handler(MessageHandler(Filters.text, message_received)) #,CustomFilters.authorized_user))
 #     dp.add_handler(MessageHandler(Filters.text, echo))
 #     dp.add_handler(InlineQueryHandler(inlinequery))
