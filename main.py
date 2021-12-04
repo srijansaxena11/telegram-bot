@@ -474,8 +474,8 @@ def do(update, context):
                 context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='(¬‿¬)')
             elif action == 'wink':
                 context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='◕‿↼')
-            elif action == 'wink':
-                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='◕‿↼')
+            elif action == 'another action':
+                context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='another action')
             else:
                 context.bot.send_message(chat_id=update.message.chat_id, reply_to_message_id=update.message.message_id, text='Action not found')
     else:
