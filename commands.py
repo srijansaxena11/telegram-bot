@@ -65,7 +65,7 @@ class Commands:
 
   def switch_on(item):
     headers = {'content-type': 'text/plain', 'accept': 'application/json'}
-    response = requests.post(f'https://home.myopenhab.org/rest/items/{item}', 'ON', auth=requests.auth.HTTPBasicAuth('srijan.saxena0@gmail.com', 'srijan*1'), headers=headers)
+    response = requests.post(f'https://home.myopenhab.org/rest/items/{item}', 'ON', auth=requests.auth.HTTPBasicAuth(os.environ["OPENHAB_USERNAME"], os.environ["OPENHAB_PASSWORD"]), headers=headers)
     return response.status_code
 
   def switch_off(item):
